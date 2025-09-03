@@ -1,0 +1,21 @@
+[
+    {
+        "pedido": "pedido x",
+        "cliente": "Cliente c",
+        "projhc": "HC001",
+        "entrega": "2025-09-10",
+        "quantidade": "50",
+        "unidade": "pcs",
+        "status": "Em andamento",
+        "responsavel": "João",
+        "atualizacao": "2025-09-01",
+        "comercial": "Carlos",
+        "detalhamento": "Pronto",
+        "producao": "Em execução",
+        "descricao": "Peças metálicas personalizadas",
+        "munsell": "5PB 3\/4",
+        "pintura": "Epóxi",
+        "comprador": "Empresa X",
+        "local_entrega": "Fábrica - Setor 2"
+    }
+]
