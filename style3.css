@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Peta:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  color: #2e2e2e;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background: #00bf8b;
+  color: #fff;
+  padding: 20px;
+}
+
+.sidebar h2 { margin-bottom: 30px; font-family: "Lexend Peta", sans-serif; }
+.sidebar .add { color: white; text-decoration: none; font-weight: bold; }
+
+main {
+  flex: 1;
+  padding: 30px;
+  background: #fff;
+  overflow-x: hidden;
+}
+
+header {
+}
+
+.t-projetos-em-andamento {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+  font-size: 1.5em;
+}
+
+.search { display:flex; gap:8px; align-items:center; justify-content: center; margin-top: 50px; }
+.search input, .search button {
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.336);
+}
+.search button { background: #00bf8b; color: white; cursor: pointer; border-radius: 5px; }
+
+/* container geral do formulário/tabela */
+.table-container{
+  max-width: 100%;
+  margin-top: 60px;
+}
+
+/* botão excluir fica acima do scroll */
+.excluir {
+  background: #00bf8b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+.excluir:hover { background-color: #bf0034; }
+
+/* wrapper que realmente faz o scroll do corpo da tabela */
+.table-scroll{
+  min-height: 100vh;
+  overflow: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.06);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* tabela */
+.table-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1200px; /* mantém a largura necessária para colunas */
+  background: #f7f7f7;
+}
+
+.table-scroll table td {
+  max-width: 200px;     /* largura máxima permitida da célula */
+  white-space: normal;  /* permite quebra de linha */
+  word-wrap: break-word; /* quebra palavras grandes */
+  overflow-wrap: break-word; /* versão mais moderna */
+  height: auto;         /* altura cresce automaticamente */
+  vertical-align: top;  /* conteúdo começa no topo da célula */
+  
+}
+
+
+/* células */
+th, td {
+  padding: 12px;
+  text-align: center;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+/* estilo do thead */
+.table-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: #eee;
+  z-index: 10;
+  /* pequena sombra para separar visualmente do conteúdo que rola */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+/* destaque de linha selecionada */
+tr.selecionado {
+  background-color: #00a6bf !important;
+  color: white;
+}
+
+/* MODAL */
+.modal {
+  display: none;              /* invisível ao carregar */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 12px; /* garante que todos os cantos fiquem arredondados */
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.modal-content button {
+  background: #00bf8b;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background: #009973;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .modal-content { width: 95%; padding: 15px; }
+  .modal-content input,
+  .modal-content textarea,
+  .modal-content button { font-size: 13px; padding: 8px; }
+}
+
+
+
+/* responsividade leve */
+@media (max-width: 900px) {
+  .table-scroll { max-height: calc(100vh - 260px); }
+  .table-scroll table { min-width: 900px; }
+}
+
+.table-container {
+  position: relative;
+}
+
+/* Barra de scroll horizontal no topo */
+.scroll-top {
+  overflow-x: auto;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+.scroll-inner {
+  height: 1px; /* só para gerar scroll */
+}
+
+.table-scroll {
+  max-height: 400px;
+  overflow: auto;
+}
+
+.table-scroll table {
+  border-collapse: collapse;
+}
+
+tbody {
+  color: #4d4d4d;
+}
+
+.imprimir {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 8px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+.imprimir:hover {
+  background: #0056b3;
+}
+
+
+tr.selecionado {
+  background-color: #00a6bf !important;
+  color: white;
+}
+
+.table-container.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  z-index: 2000;
+  padding: 20px;
+  overflow: auto;
+}
+
+.table-container.fullscreen .table-scroll {
+  max-height: calc(100vh - 100px); /* espaço para botões */
+}
