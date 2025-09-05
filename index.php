@@ -44,7 +44,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <head>
   <meta charset="UTF-8">
   <title>Painel de Projetos</title>
-  <link rel="stylesheet" href="style4.css">
+  <link rel="stylesheet" href="style5.css">
   
 </head>
 <body>
@@ -71,9 +71,8 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
     <!-- TABELA DE PROJETOS -->
     <form class="table-container" method="POST" action="processa.php">
   <button type="submit" class="excluir">Excluir selecionados</button>
-  <button class="imprimir" type="button" onclick="imprimirSelecionados()">🖨️ Imprimir</button>
+  <button class="imprimir" type="button" id="btnPrint" onclick="imprimirSelecionados()">🖨️ Imprimir</button>
   <button type="button" class="expandir" id="btnExpandir">⛶</button>
-
 
   <!-- Barra de scroll horizontal no topo -->
   <div class="scroll-top">
@@ -86,23 +85,23 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
       <thead>
         <tr>
           <th><input class="checkbox" type="checkbox" onclick="toggleAll(this)"></th>
-          <th>Pedido</th>
-          <th>Cliente</th>
-          <th>Proj. HC</th>
-          <th>Entrega</th>
-          <th>Quantid.</th>
-          <th>Un.</th>
-          <th>Status</th>
-          <th>Responsável</th>
-          <th>Atualização</th>
-          <th>Comercial</th>
-          <th>Detalhamento</th>
-          <th>Produção</th>
-          <th>Descrição e Observações</th>
-          <th>Munsell Color</th>
-          <th>Pintura</th>
-          <th>Comprador</th>
-          <th>Local de Entrega</th>
+          <th><input type="checkbox" class="col-select" checked> Pedido<button class="filtro-btn">▼</button></th>
+          <th> <input type="checkbox" class="col-select" checked> Cliente<button class="filtro-btn">▼</button></th>
+          <th> <input type="checkbox" class="col-select" checked> Proj. HC<button class="filtro-btn">▼</button></th>
+          <th> <input type="checkbox" class="col-select" checked> Entrega<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Quantid.<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Un.<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Status<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Responsável button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Atualização<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Comercial<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Detalhamento<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Produção<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Descrição e Observações<button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Munsell Color </th>
+          <th><input type="checkbox" class="col-select" checked>Pintura <button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Comprador <button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Local de Entrega <button class="filtro-btn">▼</button></th>
         </tr>
       </thead>
       <tbody>
@@ -173,6 +172,6 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 
 
   <!-- carregar script externo -->
-  <script src="script2.js"></script>
+  <script src="script3.js"></script>
 </body>
 </html>

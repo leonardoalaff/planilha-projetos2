@@ -5,7 +5,6 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   display: flex;
-  overflow-y: hidden;
 }
 
 .sidebar {
@@ -51,7 +50,6 @@ header {
   margin-right: 10px;
   max-width: 100%;
   margin-top: 60px;
-  margin-bottom: 10vh;
 }
 
 /* botão excluir fica acima do scroll */
@@ -101,6 +99,14 @@ th, td {
   text-align: center;
   white-space: nowrap;
   border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+th {
+  font-size: 0.9em;
+}
+
+td {
+  font-size: 0.8em;
 }
 
 /* estilo do thead */
@@ -272,4 +278,85 @@ tr.selecionado {
 
 .table-container.fullscreen .table-scroll {
   max-height: calc(100vh - 100px); /* espaço para botões */
+}
+
+.filtro-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.filtro-menu {
+  display: none;
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 3000;
+  padding: 5px;
+}
+
+.filtro-menu label {
+  display: block;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.table-scroll table {
+  border-collapse: collapse; /* junta as bordas para não ficar duplas */
+  width: 100%;
+}
+
+.table-scroll th,
+.table-scroll td {
+  border-right: 1px solid #ccc; /* linha vertical entre colunas */
+  padding: 8px;
+}
+
+.table-scroll th:last-child,
+.table-scroll td:last-child {
+  border-right: none; /* remove a linha da última coluna */
+}
+
+.table-scroll th {
+  border-bottom: 2px solid #666; /* linha mais forte separando o cabeçalho */
+  background: #f7f7f7;
+}
+
+/* modal de impressão de colunas */
+.print-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.45);
+  z-index: 9999;
+}
+
+.print-modal .print-modal-content {
+  background: #fff;
+  padding: 18px;
+  width: 360px;
+  max-height: 78vh;
+  overflow: auto;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+
+.print-modal h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+#printColumnsForm label { display:block; padding:6px 4px; font-size:14px; }
+.print-modal button { cursor: pointer; }
+
+@media print {
+  #printModal {
+    display: none !important;
+  }
 }
