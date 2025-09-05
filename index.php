@@ -44,7 +44,8 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <head>
   <meta charset="UTF-8">
   <title>Painel de Projetos</title>
-  <link rel="stylesheet" href="style3.css">
+  <link rel="stylesheet" href="style4.css">
+  
 </head>
 <body>
   <!-- MENU LATERAL -->
@@ -71,7 +72,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
     <form class="table-container" method="POST" action="processa.php">
   <button type="submit" class="excluir">Excluir selecionados</button>
   <button class="imprimir" type="button" onclick="imprimirSelecionados()">🖨️ Imprimir</button>
-  <button type="button" class="expandir" id="btnExpandir">⛶ Tela Cheia</button>
+  <button type="button" class="expandir" id="btnExpandir">⛶</button>
 
 
   <!-- Barra de scroll horizontal no topo -->
