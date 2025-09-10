@@ -74,6 +74,37 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
   <button class="imprimir" type="button" id="btnPrint" onclick="imprimirSelecionados()">🖨️ Imprimir</button>
   <button type="button" class="expandir" id="btnExpandir">⛶</button>
 
+  <!-- Modal de impressão -->
+<div id="printModal" class="print-modal" style="display:none;">
+  <div class="print-modal-content">
+    <h3>Escolha as colunas para imprimir</h3>
+    <form id="printColumnsForm">
+      <label><input type="checkbox" name="colunas" value="1" checked> Pedido</label>
+      <label><input type="checkbox" name="colunas" value="2" checked> Cliente</label>
+      <label><input type="checkbox" name="colunas" value="3" checked> Proj. HC</label>
+      <label><input type="checkbox" name="colunas" value="4" checked> Entrega</label>
+      <label><input type="checkbox" name="colunas" value="5" checked> Quantidade</label>
+      <label><input type="checkbox" name="colunas" value="6" checked> Unidade</label>
+      <label><input type="checkbox" name="colunas" value="7"> Status</label>
+      <label><input type="checkbox" name="colunas" value="8"> Responsável</label>
+      <label><input type="checkbox" name="colunas" value="9"> Atualização</label>
+      <label><input type="checkbox" name="colunas" value="10" checked> Comercial</label>
+      <label><input type="checkbox" name="colunas" value="11" checked> Detalhamento</label>
+      <label><input type="checkbox" name="colunas" value="12"> Produção</label>
+      <label><input type="checkbox" name="colunas" value="13" checked> Descrição e Observações</label>
+      <label><input type="checkbox" name="colunas" value="14" checked> Munsell Color</label>
+      <label><input type="checkbox" name="colunas" value="15" checked> Pintura</label>
+      <label><input type="checkbox" name="colunas" value="16" checked> Comprador</label>
+      <label><input type="checkbox" name="colunas" value="17" checked> Local de Entrega</label>
+      <div style="margin-top:12px; text-align:right;">
+        <button type="button" id="confirmarImpressao">Imprimir</button>
+        <button type="button" id="cancelarImpressao">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
   <!-- Barra de scroll horizontal no topo -->
   <div class="scroll-top">
     <div class="scroll-inner"></div>
@@ -172,6 +203,6 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 
 
   <!-- carregar script externo -->
-  <script src="script3.js"></script>
+  <script src="script4.js"></script>
 </body>
 </html>

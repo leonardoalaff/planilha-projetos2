@@ -5,7 +5,7 @@
         "cliente": "",
         "projhc": "",
         "entrega": null,
-        "quantidade": null,
+        "quantidade": "",
         "unidade": null,
         "status": null,
         "responsavel": null,
