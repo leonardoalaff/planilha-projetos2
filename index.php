@@ -44,7 +44,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <head>
   <meta charset="UTF-8">
   <title>Painel de Projetos</title>
-  <link rel="stylesheet" href="style5.css">
+  <link rel="stylesheet" href="style6.css">
   
 </head>
 <body>
@@ -57,53 +57,49 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
   <!-- CONTEÚDO PRINCIPAL -->
   <main>
     <header>
-      <h1 class="t-projetos-em-andamento">Projetos em andamento</h1>
-      <form method="GET" class="search">
-        <input type="text" name="projeto" placeholder="Projeto" value="<?= htmlspecialchars($filtroProjeto) ?>">
-<input type="date" name="data" value="<?= htmlspecialchars($filtroData) ?>">
-<input type="text" name="nome" placeholder="Nome" value="<?= htmlspecialchars($filtroNome) ?>">
+  <h1 class="t-projetos-em-andamento">Projetos em andamento</h1>
 
-        <button class="btn-pesquisar" type="submit">Pesquisar</button>
-      </form>
-    </header>
+  <form method="GET" class="search">
+    <input type="text" name="projeto" placeholder="Projeto" value="<?= htmlspecialchars($filtroProjeto) ?>">
+    <input type="date" name="data" value="<?= htmlspecialchars($filtroData) ?>">
+    <input type="text" name="nome" placeholder="Nome" value="<?= htmlspecialchars($filtroNome) ?>">
+    <button class="btn-pesquisar" type="submit">Pesquisar</button>
+  </form>
 
+  <!-- Botão para alternar -->
+  <button type="button" id="btnDashboard" class="dashboard-toggle">📊 Dashboard</button>
+</header>
 
-    <!-- TABELA DE PROJETOS -->
-    <form class="table-container" method="POST" action="processa.php">
-  <button type="submit" class="excluir">Excluir selecionados</button>
-  <button class="imprimir" type="button" id="btnPrint" onclick="imprimirSelecionados()">🖨️ Imprimir</button>
-  <button type="button" class="expandir" id="btnExpandir">⛶</button>
+<div id="dashboard" class="dashboard" style="display:none;">
+  <h2>Resumo dos Projetos</h2>
+  <div class="cards">
+    <div class="card">Total de Projetos: <?= count($lista) ?></div>
+    <div class="card">Concluídos: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'concluído')) ?></div>
+    <div class="card">Em Andamento: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'andamento')) ?></div>
+    <div class="card">Aguardando: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'aguardando')) ?></div>
+  </div>
 
-  <!-- Modal de impressão -->
-<div id="printModal" class="print-modal" style="display:none;">
-  <div class="print-modal-content">
-    <h3>Escolha as colunas para imprimir</h3>
-    <form id="printColumnsForm">
-      <label><input type="checkbox" name="colunas" value="1" checked> Pedido</label>
-      <label><input type="checkbox" name="colunas" value="2" checked> Cliente</label>
-      <label><input type="checkbox" name="colunas" value="3" checked> Proj. HC</label>
-      <label><input type="checkbox" name="colunas" value="4" checked> Entrega</label>
-      <label><input type="checkbox" name="colunas" value="5" checked> Quantidade</label>
-      <label><input type="checkbox" name="colunas" value="6" checked> Unidade</label>
-      <label><input type="checkbox" name="colunas" value="7"> Status</label>
-      <label><input type="checkbox" name="colunas" value="8"> Responsável</label>
-      <label><input type="checkbox" name="colunas" value="9"> Atualização</label>
-      <label><input type="checkbox" name="colunas" value="10" checked> Comercial</label>
-      <label><input type="checkbox" name="colunas" value="11" checked> Detalhamento</label>
-      <label><input type="checkbox" name="colunas" value="12"> Produção</label>
-      <label><input type="checkbox" name="colunas" value="13" checked> Descrição e Observações</label>
-      <label><input type="checkbox" name="colunas" value="14" checked> Munsell Color</label>
-      <label><input type="checkbox" name="colunas" value="15" checked> Pintura</label>
-      <label><input type="checkbox" name="colunas" value="16" checked> Comprador</label>
-      <label><input type="checkbox" name="colunas" value="17" checked> Local de Entrega</label>
-      <div style="margin-top:12px; text-align:right;">
-        <button type="button" id="confirmarImpressao">Imprimir</button>
-        <button type="button" id="cancelarImpressao">Cancelar</button>
-      </div>
-    </form>
+  <!-- Área dos gráficos -->
+  <div class="charts">
+    <div class="chart-box">
+      <h3>Status dos Projetos</h3>
+      <canvas id="statusChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Projetos por Data</h3>
+      <canvas id="dataChart"></canvas>
+    </div>
   </div>
 </div>
 
+
+
+    <!-- TABELA DE PROJETOS -->
+    <form class="table-container" id="tabelaProjetos" method="POST" action="processa.php">
+  <button type="submit" class="excluir">Excluir selecionados</button>
+  <button class="imprimir" type="button" id="btnPrint" onclick="imprimirSelecionados()">🖨️ Imprimir</button>
+  <button type="button" class="expandir" id="btnExpandir">⛶</button>
+  
 
   <!-- Barra de scroll horizontal no topo -->
   <div class="scroll-top">
@@ -123,7 +119,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
           <th><input type="checkbox" class="col-select" checked>Quantid.<button class="filtro-btn">▼</button></th>
           <th><input type="checkbox" class="col-select" checked>Un.<button class="filtro-btn">▼</button></th>
           <th><input type="checkbox" class="col-select" checked>Status<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Responsável button class="filtro-btn">▼</button></th>
+          <th><input type="checkbox" class="col-select" checked>Responsável <button class="filtro-btn">▼</button></th>
           <th><input type="checkbox" class="col-select" checked>Atualização<button class="filtro-btn">▼</button></th>
           <th><input type="checkbox" class="col-select" checked>Comercial<button class="filtro-btn">▼</button></th>
           <th><input type="checkbox" class="col-select" checked>Detalhamento<button class="filtro-btn">▼</button></th>
@@ -200,9 +196,28 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
   </div>
 </div>
 
+<!-- Modal de impressão (colar antes do </body>) -->
+<div id="printModal" class="print-modal" style="display:none;">
+  <div class="print-modal-content" role="dialog" aria-modal="true" aria-labelledby="printModalTitle">
+    <h3 id="printModalTitle">Escolha as colunas para imprimir</h3>
+    <form id="printColumnsForm"></form>
+
+    <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
+      <button type="button" id="selecionarTodasCols">Selecionar todas</button>
+      <button type="button" id="desselecionarTodasCols">Desmarcar todas</button>
+      <button type="button" id="confirmarImpressao">Imprimir</button>
+      <button type="button" id="cancelarImpressao">Cancelar</button>
 
 
-  <!-- carregar script externo -->
-  <script src="script4.js"></script>
+
+      
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script4.js"></script>
+</body>
+
 </body>
 </html>
