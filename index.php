@@ -66,33 +66,6 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
     <button class="btn-pesquisar" type="submit">Pesquisar</button>
   </form>
 
-  <!-- Botão para alternar -->
-  <button type="button" id="btnDashboard" class="dashboard-toggle">📊 Dashboard</button>
-</header>
-
-<div id="dashboard" class="dashboard" style="display:none;">
-  <h2>Resumo dos Projetos</h2>
-  <div class="cards">
-    <div class="card">Total de Projetos: <?= count($lista) ?></div>
-    <div class="card">Concluídos: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'concluído')) ?></div>
-    <div class="card">Em Andamento: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'andamento')) ?></div>
-    <div class="card">Aguardando: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'aguardando')) ?></div>
-  </div>
-
-  <!-- Área dos gráficos -->
-  <div class="charts">
-    <div class="chart-box">
-      <h3>Status dos Projetos</h3>
-      <canvas id="statusChart"></canvas>
-    </div>
-    <div class="chart-box">
-      <h3>Projetos por Data</h3>
-      <canvas id="dataChart"></canvas>
-    </div>
-  </div>
-</div>
-
-
 
     <!-- TABELA DE PROJETOS -->
     <form class="table-container" id="tabelaProjetos" method="POST" action="processa.php">
