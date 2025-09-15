@@ -360,3 +360,63 @@ tr.selecionado {
     display: none !important;
   }
 }
+
+
+
+
+.dashboard-toggle {
+  background: #6c63ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+.dashboard-toggle:hover {
+  background: #4a3fd9;
+}
+
+.dashboard {
+  margin-top: 30px;
+}
+.dashboard h2 {
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 20px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+.card {
+  background: #00bf8b;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+.chart-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+.chart-box h3 {
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 10px;
+  text-align: center;
+}

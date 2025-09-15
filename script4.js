@@ -310,6 +310,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const btnDashboard = document.getElementById("btnDashboard");
+  const dashboard = document.getElementById("dashboard");
+  const tabela = document.getElementById("tabelaProjetos");
+
+  if (btnDashboard) {
+    btnDashboard.addEventListener("click", () => {
+      const isDashboardVisible = dashboard.style.display === "block";
+      dashboard.style.display = isDashboardVisible ? "none" : "block";
+      tabela.style.display = isDashboardVisible ? "block" : "none";
+      btnDashboard.textContent = isDashboardVisible ? "📊 Dashboard" : "📋 Tabela";
+    });
+  }
+});
+
+
+
+
+
+
+
+
 
 
 
