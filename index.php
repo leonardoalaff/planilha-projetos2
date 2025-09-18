@@ -44,7 +44,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <head>
   <meta charset="UTF-8">
   <title>Painel de Projetos</title>
-  <link rel="stylesheet" href="style6.css">
+  <link rel="stylesheet" href="style7.css">
   
 </head>
 <body>
@@ -66,32 +66,6 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
     <button class="btn-pesquisar" type="submit">Pesquisar</button>
   </form>
 
-  <!-- Botão para alternar -->
-  <button type="button" id="btnDashboard" class="dashboard-toggle">📊 Dashboard</button>
-</header>
-
-<div id="dashboard" class="dashboard" style="display:none;">
-  <h2>Resumo dos Projetos</h2>
-  <div class="cards">
-    <div class="card">Total de Projetos: <?= count($lista) ?></div>
-    <div class="card">Concluídos: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'concluído')) ?></div>
-    <div class="card">Em Andamento: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'andamento')) ?></div>
-    <div class="card">Aguardando: <?= count(array_filter($lista, fn($p) => strtolower($p['status'] ?? '') === 'aguardando')) ?></div>
-  </div>
-
-  <!-- Área dos gráficos -->
-  <div class="charts">
-    <div class="chart-box">
-      <h3>Status dos Projetos</h3>
-      <canvas id="statusChart"></canvas>
-    </div>
-    <div class="chart-box">
-      <h3>Projetos por Data</h3>
-      <canvas id="dataChart"></canvas>
-    </div>
-  </div>
-</div>
-
 
 
     <!-- TABELA DE PROJETOS -->
@@ -112,23 +86,23 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
       <thead>
         <tr>
           <th><input class="checkbox" type="checkbox" onclick="toggleAll(this)"></th>
-          <th><input type="checkbox" class="col-select" checked> Pedido<button class="filtro-btn">▼</button></th>
-          <th> <input type="checkbox" class="col-select" checked> Cliente<button class="filtro-btn">▼</button></th>
-          <th> <input type="checkbox" class="col-select" checked> Proj. HC<button class="filtro-btn">▼</button></th>
-          <th> <input type="checkbox" class="col-select" checked> Entrega<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Quantid.<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Un.<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Status<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Responsável <button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Atualização<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Comercial<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Detalhamento<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Produção<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Descrição e Observações<button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Munsell Color </th>
-          <th><input type="checkbox" class="col-select" checked>Pintura <button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Comprador <button class="filtro-btn">▼</button></th>
-          <th><input type="checkbox" class="col-select" checked>Local de Entrega <button class="filtro-btn">▼</button></th>
+          <th>Pedido<button class="filtro-btn" data-col="1">▼</button></th>
+          <th>Cliente<button class="filtro-btn" data-col="2">▼</button></th>
+          <th>Proj. HC<button class="filtro-btn" data-col="3">▼</button></th>
+          <th>Entrega<button class="filtro-btn" data-col="4">▼</button></th>
+          <th>Quantid.<button class="filtro-btn" data-col="5">▼</button></th>
+          <th>Un.<button class="filtro-btn" data-col="6">▼</button></th>
+          <th>Status<button class="filtro-btn" data-col="7">▼</button></th>
+          <th>Responsável <button class="filtro-btn" data-col="8">▼</button></th>
+          <th>Atualização<button class="filtro-btn" data-col="9">▼</button></th>
+          <th>Comercial<button class="filtro-btn" data-col="10">▼</button></th>
+          <th>Detalhamento<button class="filtro-btn" data-col="11">▼</button></th>
+          <th>Produção<button class="filtro-btn" data-col="12">▼</button></th>
+          <th>Descrição e Observações<button class="filtro-btn" data-col="13">▼</button></th>
+          <th>Munsell Color<button class="filtro-btn" data-col="14">▼</button></th>
+          <th>Pintura <button class="filtro-btn" data-col="15">▼</button></th>
+          <th>Comprador <button class="filtro-btn" data-col="16">▼</button></th>
+          <th>Local de Entrega <button class="filtro-btn" data-col="17">▼</button></th>
         </tr>
       </thead>
       <tbody>
@@ -216,7 +190,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="script4.js"></script>
+<script src="script5.js"></script>
 </body>
 
 </body>

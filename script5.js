@@ -309,30 +309,113 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+document.addEventListener('DOMContentLoaded', () => {
+  const table = document.querySelector('.table-scroll table');
+  let menuAtivo = null;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const btnDashboard = document.getElementById("btnDashboard");
-  const dashboard = document.getElementById("dashboard");
-  const tabela = document.getElementById("tabelaProjetos");
+  const escapeHtml = s => String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-  if (btnDashboard) {
-    btnDashboard.addEventListener("click", () => {
-      const isDashboardVisible = dashboard.style.display === "block";
-      dashboard.style.display = isDashboardVisible ? "none" : "block";
-      tabela.style.display = isDashboardVisible ? "block" : "none";
-      btnDashboard.textContent = isDashboardVisible ? "📊 Dashboard" : "📋 Tabela";
-    });
+  function fecharMenu() {
+    if (menuAtivo) { menuAtivo.remove(); menuAtivo = null; }
   }
+
+  function abrirMenu(btn) {
+    fecharMenu();
+    const th = btn.closest('th');
+    if (!th) return;
+
+    // calcula índice da coluna no thead (0 = checkbox, 1 = Pedido, ...)
+    const colIndex = Array.from(th.parentElement.children).indexOf(th);
+
+    // coleta valores únicos da coluna (string)
+    const valoresSet = new Set();
+    table.querySelectorAll('tbody tr').forEach(tr => {
+      const td = tr.cells[colIndex];
+      valoresSet.add(td ? td.textContent.trim() : '');
+    });
+    const valores = Array.from(valoresSet);
+
+    // monta menu
+    const menu = document.createElement('div');
+    menu.className = 'filtro-menu';
+    const itens = [];
+    itens.push(`<label><input type="checkbox" data-select-all checked> Selecionar todos</label>`);
+    valores.forEach(v => {
+      const valAttr = v === '' ? '__EMPTY__' : escapeHtml(v);
+      const labelText = v === '' ? '(vazio)' : escapeHtml(v);
+      itens.push(`<label><input type="checkbox" value="${valAttr}" checked> ${labelText}</label>`);
+    });
+
+    menu.innerHTML = `
+      <div style="min-width:200px; max-height:160px; overflow:auto;">
+        ${itens.join('')}
+      </div>
+      <div style="display:flex; gap:6px; margin-top:8px;">
+        <button type="button" data-apply style="flex:1">Aplicar</button>
+        <button type="button" data-cancel style="flex:1">Cancelar</button>
+      </div>
+    `;
+
+    document.body.appendChild(menu);
+    menuAtivo = menu;
+
+    // posiciona abaixo do botão (considera scroll)
+    const rect = btn.getBoundingClientRect();
+    menu.style.left = `${rect.left + window.scrollX}px`;
+    menu.style.top  = `${rect.bottom + window.scrollY}px`;
+    menu.style.display = 'block';
+
+    // evita fechamento ao clicar dentro
+    menu.addEventListener('click', e => e.stopPropagation());
+
+    // select all
+    const selectAll = menu.querySelector('[data-select-all]');
+    selectAll.addEventListener('change', (e) => {
+      const checked = e.target.checked;
+      menu.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        if (cb !== e.target) cb.checked = checked;
+      });
+    });
+
+    // aplicar
+    menu.querySelector('[data-apply]').addEventListener('click', () => {
+      const selected = Array.from(menu.querySelectorAll('input[type="checkbox"]'))
+        .filter(cb => cb.checked && !cb.hasAttribute('data-select-all'))
+        .map(cb => cb.value);
+
+      table.querySelectorAll('tbody tr').forEach(tr => {
+        const td = tr.cells[colIndex];
+        const v = td ? td.textContent.trim() : '';
+        const compare = v === '' ? '__EMPTY__' : v;
+        tr.style.display = (selected.length === 0 || selected.includes(compare)) ? '' : 'none';
+      });
+
+      fecharMenu();
+    });
+
+    // cancelar
+    menu.querySelector('[data-cancel]').addEventListener('click', fecharMenu);
+  }
+
+  // liga aos botões
+  document.querySelectorAll('.filtro-btn').forEach(btn => {
+    // garante que seja type="button" mesmo se o HTML não tiver
+    btn.setAttribute('type','button');
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      abrirMenu(btn);
+    });
+  });
+
+  // fecha ao clicar fora
+  document.addEventListener('click', (e) => {
+    if (menuAtivo && !menuAtivo.contains(e.target)) fecharMenu();
+  });
+
+  // fecha em resize/scroll (útil)
+  window.addEventListener('resize', fecharMenu);
+  window.addEventListener('scroll', fecharMenu, true);
 });
-
-
-
-
-
-
-
-
-
-
-
-
