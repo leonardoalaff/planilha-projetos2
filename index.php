@@ -57,7 +57,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
   <!-- CONTEÚDO PRINCIPAL -->
   <main>
     <header>
-  <h1 class="t-projetos-em-andamento">Projetos em andamento</h1>
+  <h1 class="t-projetos-em-andamento">Projetos em andamento <span></span></h1>
 
   <form method="GET" class="search">
     <input type="text" name="projeto" placeholder="Projeto" value="<?= htmlspecialchars($filtroProjeto) ?>">
@@ -70,9 +70,11 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 
     <!-- TABELA DE PROJETOS -->
     <form class="table-container" id="tabelaProjetos" method="POST" action="processa.php">
-  <button type="submit" class="excluir">Excluir selecionados</button>
-  <button class="imprimir" type="button" id="btnPrint" onclick="imprimirSelecionados()">🖨️ Imprimir</button>
+  <div class="botoes"><button type="submit" class="excluir btn-excluir">Excluir</button>
+  <button class="imprimir btn-imprimir" type="button" id="btnPrint" onclick="imprimirSelecionados()"><span class="icone-impressora">🖨️</span> Imprimir
+<span class="papel"></span></button>
   <button type="button" class="expandir" id="btnExpandir">⛶</button>
+</div>
   
 
   <!-- Barra de scroll horizontal no topo -->
