@@ -1,4 +1,4 @@
-// script.js - versão sem modal de impressão
+// script.js
 
 // --- Função para salvar edição inline ---
 function salvarEdicao(e) {

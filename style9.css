@@ -1,6 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend+Peta:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+/* style.css */
 
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Peta:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Peta:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
   color: #2e2e2e;
@@ -10,10 +12,13 @@ body {
 }
 
 .sidebar {
-  width: 220px;
+  position: fixed;
+  width: 13%;
   background: #1a2e61;
   color: #fff;
   padding: 20px;
+  height: 100vh;
+  z-index: 1000;
 }
 
 .sidebar h2 {
@@ -40,12 +45,16 @@ main {
 }
 
 .t-projetos-em-andamento {
+  position: relative;
+  top: -2vh;
+  right: -12%;
+  width: 80%;
   color: #14234a;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 0 5%;
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-weight: weight;
   font-style: normal;
@@ -63,7 +72,16 @@ main {
 }
 
 
-.search { display:flex; gap:8px; align-items:center; justify-content: center; margin-top: 50px; }
+.search {
+  position: relative;
+  right: -7%;
+  top: 2vh;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content: center;
+  margin-top: -30px;
+}
 .search input, .search button {
   padding: 8px;
   border-radius: 10px;
@@ -75,9 +93,11 @@ main {
 
 /* container geral do formulário/tabela */
 .table-container{
+  position: fixed;
+  right: -15%;
   margin-right: 10px;
-  max-width: 100%;
-  margin-top: 60px;
+  max-width: 85%;
+  margin-top: 100px;
 }
 
 .botoes {
@@ -277,22 +297,7 @@ tr.selecionado {
   color: white;
 }
 
-.table-container.fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: white;
-  z-index: 2000;
-  padding: 20px;
-  overflow: auto;
-  margin: 0;
-}
 
-.table-container.fullscreen .table-scroll {
-  max-height: calc(100vh - 100px); /* espaço para botões */
-}
 
 .filtro-btn {
   border: none;
@@ -455,12 +460,31 @@ tr.selecionado {
     box-shadow: 0 0 2px rgba(255, 0, 0, 0.76);
 }
 
+.table-container.fullscreen {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: -12px;
+  min-width: 100%;
+  height: 99vh;
+  z-index: 2000;
+  padding: 20px;
+  overflow: auto;
+  margin: 0;
+}
+
+.table-container.fullscreen .table-scroll {
+  max-height: calc(100vh - 100px); /* espaço para botões */
+}
+
 
 /* Container do switch */
 .switch {
-  position: relative;
-  right: -75%;
+  position: fixed;
   display: inline-block;
+  top: 95vh;
+  left: 1%;
+
   width: 60px;
   height: 34px;
 }
@@ -607,3 +631,5 @@ body.dark-mode .t-projetos-em-andamento span {
 body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {
   transition: background-color 0.3s, color 0.3s;
 }
+
+

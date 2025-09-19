@@ -1,4 +1,6 @@
-<?php
+<!-- index.php -->
+ 
+ <?php
 // Carregar lista de projetos de um arquivo JSON
 $arquivo = "projetos.json";
 
@@ -26,13 +28,18 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <head>
   <meta charset="UTF-8">
   <title>Painel de Projetos</title>
-  <link rel="stylesheet" href="style8.css">
+  <link rel="stylesheet" href="style9.css">
 </head>
 <body>
   <!-- MENU LATERAL -->
   <aside class="sidebar">
     <h2>PAINEL</h2>
     <a href="#" class="add" id="abrirModal">+ Adicionar Projeto</a>
+
+    <abbr class="switch" title="Modo Dark"><label class="switch">
+  <input type="checkbox" id="toggleDarkMode">
+  <span class="slider"></span>
+</label></abbr>
   </aside>
 
   <!-- CONTEÚDO PRINCIPAL -->
@@ -59,12 +66,6 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
         <button type="button" class="expandir" id="btnExpandir">
           <abbr title="Expandir" class="abbr-expandir">⛶</abbr>
         </button>
-
-        <abbr class="switch" title="Modo Dark"><label class="switch">
-  <input type="checkbox" id="toggleDarkMode">
-  <span class="slider"></span>
-</label></abbr>
-
       </div>
 
       <!-- Barra de scroll horizontal no topo -->
@@ -129,7 +130,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
         <input type="text" name="cliente" placeholder="Cliente">
         <input type="text" name="projhc" placeholder="Proj. HC">
         <input type="date" name="entrega">
-        <input type="number" name="quantidade" placeholder="Quantidade">
+        <input type="text" name="quantidade" placeholder="Quantidade">
         <input type="text" name="unidade" placeholder="Unidade">
         <input type="text" name="status" placeholder="Status">
         <input type="text" name="responsavel" placeholder="Responsável">
