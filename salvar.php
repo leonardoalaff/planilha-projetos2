@@ -5,10 +5,11 @@ $projetos = file_exists($arquivo) ? json_decode(file_get_contents($arquivo), tru
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $novo = [
     "id" => uniqid(),  // <-- id único
+    "ultimaalteracao" => $_POST['ultimaalteracao'],
     "pedido" => $_POST['pedido'],
     "cliente" => $_POST['cliente'],
     "projhc" => $_POST['projhc'],
-    "entrega" => $_POST['entrega'],
+    "entrega" => $_POST['local_entrega'],
     "quantidade" => $_POST['quantidade'],
     "unidade" => $_POST['unidade'],
     "status" => $_POST['status'],

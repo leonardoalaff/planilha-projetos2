@@ -419,3 +419,51 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', fecharMenu);
   window.addEventListener('scroll', fecharMenu, true);
 });
+
+
+document.querySelectorAll("#tabelaProjetos td[contenteditable='true']").forEach(celula => {
+    let valorOriginal = "";
+
+    // Quando a célula recebe foco, guarda o valor inicial
+    celula.addEventListener("focus", function() {
+        valorOriginal = this.textContent.trim();
+    });
+
+    // Quando perde o foco, compara valor atual com o original
+    celula.addEventListener("blur", function() {
+        const novoValor = this.textContent.trim();
+
+        // Se não mudou nada, não faz nada
+        if (novoValor === valorOriginal) {
+            return;
+        }
+
+        const linha = this.closest("tr");
+const id = linha.dataset.id; // pegar id ao invés de pedido
+const campo  = this.dataset.campo;
+const agora = new Date();
+const dataHora = agora.toLocaleDateString("pt-BR") + " " + agora.toLocaleTimeString("pt-BR");
+linha.querySelector("td[data-campo='ultimaalteracao']").textContent = dataHora;
+
+fetch("editar.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `id=${encodeURIComponent(id)}&campo=${encodeURIComponent(campo)}&valor=${encodeURIComponent(novoValor)}&ultimaalteracao=${encodeURIComponent(dataHora)}`
+});
+
+    });
+});
+
+
+const toggle = document.getElementById('toggleDarkMode');
+
+// Mantém o estado no localStorage (opcional)
+if (localStorage.getItem('darkMode') === 'true') {
+  document.body.classList.add('dark-mode');
+  toggle.checked = true;
+}
+
+toggle.addEventListener('change', () => {
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem('darkMode', toggle.checked); // salva preferência
+});
