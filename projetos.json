@@ -1,14 +1,14 @@
 [
     {
         "id": "68cd67e4bd426",
-        "ultimaalteracao": "19\/09\/2025 11:25:57",
+        "ultimaalteracao": "19\/09\/2025 12:52:44",
         "pedido": "121",
         "cliente": "212",
         "projhc": "121",
         "entrega": "3",
         "quantidade": "212",
-        "unidade": "121",
-        "status": "2",
+        "unidade": "121d",
+        "status": "2d",
         "responsavel": "53",
         "atualizacao": "36",
         "comercial": "36",

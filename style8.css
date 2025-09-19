@@ -139,12 +139,6 @@ td {
   box-shadow: 0 2px 4px rgba(0,0,0,0.04);
 }
 
-/* destaque de linha selecionada */
-tr.selecionado {
-  background-color: #00a6bf !important;
-  color: white;
-}
-
 /* MODAL */
 .modal {
   display: none;              /* invisível ao carregar */
@@ -424,7 +418,7 @@ tr.selecionado {
   border-radius: 1px;
   transform: translateX(-50%) rotate(0deg);
   opacity: 0;
-  transition: all 0.4s ease-out;
+  transition: all 0.5s ease-out;
   z-index: 0;
   border: 1px solid black;
 }
@@ -505,7 +499,7 @@ tr.selecionado {
 
 /* Estado ativo */
 input:checked + .slider {
-  background-color: #2196F3;
+  background: #1a2e61;
 }
 
 input:checked + .slider::before {
@@ -531,7 +525,7 @@ body.dark-mode {
 }
 
 body.dark-mode .sidebar {
-  background-color: #1b1f2e;
+  background-color: #1e1e1e;
   color: #f0f0f0;
 }
 
@@ -541,8 +535,11 @@ body.dark-mode main {
 }
 
 body.dark-mode header {
-  background-color: #1e1e1e;
   color: #f0f0f0;
+}
+
+body.dark-mode header h1 {
+  color: white;
 }
 
 body.dark-mode .table-scroll table {
@@ -573,10 +570,16 @@ body.dark-mode .print-modal-content {
 body.dark-mode .btn-imprimir,
 body.dark-mode .btn-excluir,
 body.dark-mode #btn-salvar,
-body.dark-mode .expandir,
 body.dark-mode .search button {
-  background-color: #333;
+  background: #1a2e61;
   color: #fff;
+}
+body.dark-mode .expandir {
+  background-color: transparent;
+  color: white;
+}
+body.dark-mode .btn-excluir:hover {
+  background-color: red;
 }
 
 body.dark-mode .search input,
@@ -591,6 +594,14 @@ body.dark-mode .filtro-menu {
   background-color: #2a2a2a;
   color: #f0f0f0;
   border: 1px solid #444;
+}
+
+body.dark-mode .table-container.fullscreen {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode .t-projetos-em-andamento span {
+  filter: saturate(0);
 }
 
 body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {

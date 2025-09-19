@@ -60,10 +60,10 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
           <abbr title="Expandir" class="abbr-expandir">⛶</abbr>
         </button>
 
-        <label class="switch">
+        <abbr class="switch" title="Modo Dark"><label class="switch">
   <input type="checkbox" id="toggleDarkMode">
   <span class="slider"></span>
-</label>
+</label></abbr>
 
       </div>
 
