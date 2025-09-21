@@ -413,7 +413,7 @@ tr.selecionado {
 
 .btn-imprimir .icone-impressora {
   position: relative;
-  margin-right: 8px;
+  left: -2.8%;
   display: inline-block;
   transition: transform 0.3s;
   z-index: 2;

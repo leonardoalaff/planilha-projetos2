@@ -33,8 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>Login</title>
   <style>
     body {
+      background: url("imagens/background-login.svg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+      overflow: hidden;
       font-family: Arial, sans-serif;
-      background: #f3f3f3;
       display: flex;
       height: 100vh;
       justify-content: center;
@@ -59,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .login-box button {
       width: 100%;
       padding: 10px;
-      background: #0077cc;
+      background: #1a2e61;
       color: white;
       border: none;
       border-radius: 5px;

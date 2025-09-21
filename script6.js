@@ -443,32 +443,45 @@ const id = linha.dataset.id; // pegar id ao invés de pedido
 const campo  = this.dataset.campo;
 const agora = new Date();
 const dataHora = agora.toLocaleDateString("pt-BR") + " " + agora.toLocaleTimeString("pt-BR");
-linha.querySelector("td[data-campo='ultimaalteracao']").textContent = dataHora;
+const textoUltima = `${usuarioLogado} - ${dataHora}`;
+linha.querySelector("td[data-campo='ultimaalteracao']").textContent = textoUltima;
 
 fetch("editar.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: `id=${encodeURIComponent(id)}&campo=${encodeURIComponent(campo)}&valor=${encodeURIComponent(novoValor)}&ultimaalteracao=${encodeURIComponent(dataHora)}`
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: `id=${encodeURIComponent(id)}&campo=${encodeURIComponent(campo)}&valor=${encodeURIComponent(novoValor)}&ultimaalteracao=${encodeURIComponent(textoUltima)}`
 });
+
+
 
     });
 });
 
 
-const toggle = document.getElementById('toggleDarkMode');
+const toggle = document.getElementById("toggleDarkMode");
 
+toggle.addEventListener("change", function() {
+    document.body.classList.toggle('dark-mode', this.checked); // aplica/remova a classe
 
-
-
-
-
-document.getElementById("toggleDarkMode").addEventListener("change", function() {
+    // envia para o PHP salvar no banco ou sessão
     fetch("salvar_darkmode.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: "darkmode=" + this.checked
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetch("salvar_darkmode.php?action=check")
+        .then(res => res.json())
+        .then(data => {
+            if (data.darkmode) {
+                document.body.classList.add('dark-mode');
+                toggle.checked = true;
+            }
+        });
+});
+
 
 
 

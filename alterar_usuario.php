@@ -1,3 +1,5 @@
+<!-- alterar_usuario.php -->
+
 <?php
 session_start();
 

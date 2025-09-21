@@ -39,7 +39,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <head>
   <meta charset="UTF-8">
   <title>Painel de Projetos</title>
-  <link rel="stylesheet" href="style9.css">
+  <link rel="stylesheet" href="style10.css">
 </head>
 <body class="<?= $isDark ? 'dark-mode' : '' ?>">
   <!-- MENU LATERAL -->
@@ -278,6 +278,11 @@ body.dark {
   color: #eee;
 }
 </style>
+
+<script>
+  const usuarioLogado = "<?= $_SESSION['usuario'] ?? '' ?>";
+</script>
+<script src="script.js"></script>
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
