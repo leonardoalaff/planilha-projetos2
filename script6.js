@@ -454,16 +454,86 @@ fetch("editar.php", {
     });
 });
 
-
+// controle do toggle de darkmode (usa server-side)
 const toggle = document.getElementById('toggleDarkMode');
+if (toggle) {
+  toggle.addEventListener('change', () => {
+    const isDark = toggle.checked;
+    // aplica imediatamente na página
+    document.body.classList.toggle('dark-mode', isDark);
 
-// Mantém o estado no localStorage (opcional)
-if (localStorage.getItem('darkMode') === 'true') {
-  document.body.classList.add('dark-mode');
-  toggle.checked = true;
+    // envia para o servidor para gravar nas preferências do usuário
+    fetch('salvar_darkmode.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'darkmode=' + (isDark ? '1' : '0')
+    })
+    .then(resp => resp.json().catch(()=>({ok:false})))
+    .then(data => {
+      if (!data.ok) console.warn('Não foi possível salvar darkmode:', data);
+    })
+    .catch(err => console.error('Erro ao salvar darkmode:', err));
+  });
 }
 
-toggle.addEventListener('change', () => {
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('darkMode', toggle.checked); // salva preferência
+
+
+
+
+document.getElementById("toggleDarkMode").addEventListener("change", function() {
+    fetch("salvar_darkmode.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "darkmode=" + this.checked
+    });
 });
+
+
+
+const configModal = document.getElementById("configModal");
+const novaContaModal = document.getElementById("novaContaModal");
+const btnConfig = document.getElementById("btnConfig");
+const btnNovaConta = document.getElementById("btnNovaConta");
+const closeConfig = document.querySelector(".close");
+const closeNova = document.querySelector(".closeNova");
+
+// abre modal de config
+btnConfig.onclick = () => configModal.style.display = "block";
+
+// fecha modal de config
+closeConfig.onclick = () => configModal.style.display = "none";
+
+// abre modal nova conta
+btnNovaConta.onclick = () => {
+  configModal.style.display = "none";
+  novaContaModal.style.display = "block";
+}
+
+// fecha modal nova conta
+closeNova.onclick = () => novaContaModal.style.display = "none";
+
+// fecha ao clicar fora
+window.onclick = (e) => {
+  if (e.target == configModal) configModal.style.display = "none";
+  if (e.target == novaContaModal) novaContaModal.style.display = "none";
+}
+
+
+
+const btnAlterarUsuario = document.getElementById("btnAlterarUsuario");
+const alterarUsuarioModal = document.getElementById("alterarUsuarioModal");
+const closeAlterar = document.querySelector(".closeAlterar");
+
+// Abre modal alterar usuário
+btnAlterarUsuario.onclick = () => {
+  configModal.style.display = "none";
+  alterarUsuarioModal.style.display = "block";
+}
+
+// Fecha modal alterar usuário
+closeAlterar.onclick = () => alterarUsuarioModal.style.display = "none";
+
+// Fecha ao clicar fora
+window.onclick = (e) => {
+  if (e.target == alterarUsuarioModal) alterarUsuarioModal.style.display = "none";
+}

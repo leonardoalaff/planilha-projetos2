@@ -1,5 +1,16 @@
 <!-- index.php -->
- 
+
+<?php
+session_start();
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header("Location: login.php");
+    exit;
+}
+
+// define variável para uso no HTML
+$isDark = !empty($_SESSION['darkmode']) ? true : false;
+?>
+
  <?php
 // Carregar lista de projetos de um arquivo JSON
 $arquivo = "projetos.json";
@@ -30,22 +41,34 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
   <title>Painel de Projetos</title>
   <link rel="stylesheet" href="style9.css">
 </head>
-<body>
+<body class="<?= $isDark ? 'dark-mode' : '' ?>">
   <!-- MENU LATERAL -->
   <aside class="sidebar">
     <h2>PAINEL</h2>
+    <!-- Mensagem de boas-vindas -->
+  <div class="bem-vindo">
+    Bem-vindo, <?= htmlspecialchars($_SESSION['usuario'] ?? 'Usuário') ?>!
+  </div>
     <a href="#" class="add" id="abrirModal">+ Adicionar Projeto</a>
 
     <abbr class="switch" title="Modo Dark"><label class="switch">
-  <input type="checkbox" id="toggleDarkMode">
+  <input type="checkbox" id="toggleDarkMode"> <?= $isDark ? '' : '' ?> >
   <span class="slider"></span>
 </label></abbr>
+
+<a href="logout.php">Sair</a>
+
+<button id="btnConfig">⚙️ Configurações</button>
+
+
   </aside>
 
   <!-- CONTEÚDO PRINCIPAL -->
   <main>
     <header>
-      <h1 class="t-projetos-em-andamento">Projetos em andamento <span></span></h1>
+      <h1 class="t-projetos-em-andamento">Projetos em andamento 
+        <span></span>
+      </h1>
 
       <form method="GET" class="search">
         <input type="text" name="projeto" placeholder="Projeto" value="<?= htmlspecialchars($filtroProjeto) ?>">
@@ -161,6 +184,101 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
       </div>
     </div>
   </div>
+
+  <!-- Modal de Configurações -->
+<!-- Modal de Configurações -->
+<div id="configModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Configurações</h2>
+    <button id="btnNovaConta">Criar uma nova conta</button>
+    <button id="btnAlterarUsuario">Alterar usuário e senha</button> <!-- NOVO BOTÃO -->
+  </div>
+</div>
+
+
+<!-- Modal Criar Nova Conta -->
+<div id="novaContaModal" class="modal">
+  <div class="modal-content">
+    <span class="closeNova">&times;</span>
+    <h2>Criar Nova Conta</h2>
+    <form method="POST" action="nova_conta.php">
+      <input type="text" name="usuario" placeholder="Novo usuário" required>
+      <input type="password" name="senha" placeholder="Senha" required>
+      <button type="submit">Salvar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Alterar Usuário e Senha -->
+<div id="alterarUsuarioModal" class="modal">
+  <div class="modal-content">
+    <span class="closeAlterar">&times;</span>
+    <h2>Alterar Usuário e Senha</h2>
+    <form method="POST" action="alterar_usuario.php">
+      <input type="text" name="usuario" placeholder="Novo usuário" required>
+      <input type="password" name="senha" placeholder="Nova senha" required>
+      <button type="submit">Salvar</button>
+    </form>
+  </div>
+</div>
+
+
+<style>
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  margin: 10% auto;
+  text-align: center;
+}
+.modal-content input {
+  width: 90%;
+  padding: 8px;
+  margin: 5px 0;
+}
+.modal-content button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+}
+.close, .closeNova {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+}
+</style>
+
+<script>
+document.getElementById("toggleDarkMode").addEventListener("change", function() {
+  const darkMode = this.checked ? 1 : 0;
+
+  fetch("salvar_darkmode.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "darkmode=" + darkMode
+  }).then(() => {
+    document.body.classList.toggle("dark", darkMode === 1);
+  });
+});
+</script>
+
+<style>
+body.dark {
+  background: #121212;
+  color: #eee;
+}
+</style>
+
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script6.js"></script>
