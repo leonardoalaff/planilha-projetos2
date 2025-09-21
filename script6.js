@@ -454,27 +454,9 @@ fetch("editar.php", {
     });
 });
 
-// controle do toggle de darkmode (usa server-side)
-const toggle = document.getElementById('toggleDarkMode');
-if (toggle) {
-  toggle.addEventListener('change', () => {
-    const isDark = toggle.checked;
-    // aplica imediatamente na página
-    document.body.classList.toggle('dark-mode', isDark);
 
-    // envia para o servidor para gravar nas preferências do usuário
-    fetch('salvar_darkmode.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'darkmode=' + (isDark ? '1' : '0')
-    })
-    .then(resp => resp.json().catch(()=>({ok:false})))
-    .then(data => {
-      if (!data.ok) console.warn('Não foi possível salvar darkmode:', data);
-    })
-    .catch(err => console.error('Erro ao salvar darkmode:', err));
-  });
-}
+const toggle = document.getElementById('toggleDarkMode');
+
 
 
 
@@ -516,24 +498,4 @@ closeNova.onclick = () => novaContaModal.style.display = "none";
 window.onclick = (e) => {
   if (e.target == configModal) configModal.style.display = "none";
   if (e.target == novaContaModal) novaContaModal.style.display = "none";
-}
-
-
-
-const btnAlterarUsuario = document.getElementById("btnAlterarUsuario");
-const alterarUsuarioModal = document.getElementById("alterarUsuarioModal");
-const closeAlterar = document.querySelector(".closeAlterar");
-
-// Abre modal alterar usuário
-btnAlterarUsuario.onclick = () => {
-  configModal.style.display = "none";
-  alterarUsuarioModal.style.display = "block";
-}
-
-// Fecha modal alterar usuário
-closeAlterar.onclick = () => alterarUsuarioModal.style.display = "none";
-
-// Fecha ao clicar fora
-window.onclick = (e) => {
-  if (e.target == alterarUsuarioModal) alterarUsuarioModal.style.display = "none";
 }
