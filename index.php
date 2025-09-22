@@ -56,10 +56,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
   <span class="slider"></span>
 </label></abbr>
 
-<a href="logout.php">Sair</a>
-
-<button id="btnConfig">⚙️ Configurações</button>
-
+<button id="btnConfig"><span class="icone-config">⚙️</span> Configurações</button>
 
   </aside>
 
@@ -192,7 +189,8 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
     <span class="close">&times;</span>
     <h2>Configurações</h2>
     <button id="btnNovaConta">Criar uma nova conta</button>
-    <button id="btnAlterarUsuario">Alterar usuário e senha</button> <!-- NOVO BOTÃO -->
+    <button id="btnAlterarUsuario">Alterar usuário e senha</button>
+    <a href="logout.php" class="btn-sair">Sair da conta</a>
   </div>
 </div>
 
@@ -278,6 +276,35 @@ body.dark {
   color: #eee;
 }
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Botão e modal de Alterar Usuário
+  const btnAlterarUsuario = document.getElementById("btnAlterarUsuario");
+  const alterarUsuarioModal = document.getElementById("alterarUsuarioModal");
+  const closeAlterar = document.querySelector(".closeAlterar");
+
+  if (btnAlterarUsuario && alterarUsuarioModal) {
+    btnAlterarUsuario.addEventListener("click", () => {
+      alterarUsuarioModal.style.display = "flex";
+    });
+  }
+
+  if (closeAlterar && alterarUsuarioModal) {
+    closeAlterar.addEventListener("click", () => {
+      alterarUsuarioModal.style.display = "none";
+    });
+  }
+
+  // Fecha clicando fora do modal
+  window.addEventListener("click", e => {
+    if (e.target === alterarUsuarioModal) {
+      alterarUsuarioModal.style.display = "none";
+    }
+  });
+});
+</script>
+
 
 <script>
   const usuarioLogado = "<?= $_SESSION['usuario'] ?? '' ?>";
