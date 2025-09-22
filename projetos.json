@@ -40,26 +40,5 @@
         "pintura": "",
         "comprador": "",
         "local_entrega": ""
-    },
-    {
-        "id": "68d1a5b1b7ede",
-        "ultimaalteracao": "adminhc - 22\/09\/2025 18:55:11",
-        "pedido": "teste",
-        "cliente": "teste",
-        "projhc": "",
-        "entrega": "",
-        "quantidade": "",
-        "unidade": "",
-        "status": "0",
-        "responsavel": "",
-        "atualizacao": "",
-        "comercial": "",
-        "detalhamento": "",
-        "producao": "",
-        "descricao": "",
-        "munsell": "",
-        "pintura": "",
-        "comprador": "",
-        "local_entrega": ""
     }
 ]
