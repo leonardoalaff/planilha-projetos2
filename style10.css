@@ -766,3 +766,46 @@ body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {
   cursor: pointer;
   font-size: 20px;
 }
+
+
+.filtro-modal {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.6);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:2000;
+}
+.filtro-content {
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  text-align:center;
+}
+.filtro-content button {
+  display:block;
+  margin:5px auto;
+  padding:6px 12px;
+}
+
+
+
+/* botão mostrar/ocultar coluna */
+#toggleUltima {
+  background-color: #007bff; /* azul padrão */
+  position: absolute;
+  right: 2%;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#toggleUltima:hover {
+  background-color: #0056b3; /* azul mais escuro no hover */
+}

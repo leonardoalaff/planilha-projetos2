@@ -195,21 +195,6 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
   </div>
 </div>
 
-<!-- Modal Excluir Usuários -->
-<div id="excluirUsuariosModal" class="modal">
-  <div class="modal-content">
-    <span class="closeExcluir">&times;</span>
-    <h2>Excluir Usuários</h2>
-    <div id="listaUsuarios"></div>
-    <button id="confirmarExcluirUsuarios">Excluir selecionados</button>
-    <button id="cancelarExcluirUsuarios">Cancelar</button>
-  </div>
-</div>
-
-
-
-
-
 <!-- Modal Criar Nova Conta -->
 <div id="novaContaModal" class="modal">
   <div class="modal-content">

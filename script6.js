@@ -1,5 +1,64 @@
 // script.js
 
+document.addEventListener('DOMContentLoaded', () => {
+    const table = document.querySelector('.table-scroll table');
+    if (!table) { console.error('Tabela não encontrada'); return; }
+
+    // índice da coluna "Última alteração"
+    const headers = Array.from(table.querySelectorAll('thead th'));
+    let targetIndex = headers.findIndex(th => th.textContent.toLowerCase().includes('última alteração'));
+
+    if (targetIndex === -1) {
+        const firstRow = table.querySelector('tbody tr');
+        if (firstRow) {
+            targetIndex = Array.from(firstRow.children).findIndex(td => td.dataset.campo === 'ultimaalteracao');
+        }
+    }
+
+    if (targetIndex === -1) {
+        console.error('Coluna "Última alteração" não encontrada.');
+        return;
+    }
+
+    // cria botão se não existir
+    let btn = document.getElementById('toggleUltima');
+    if (!btn) {
+        const botoes = document.querySelector('.botoes') || document.body;
+        const expandirBtn = document.getElementById('btnExpandir');
+        btn = document.createElement('button');
+        btn.id = 'toggleUltima';
+        btn.type = 'button';
+        btn.textContent = 'Mostrar Última Alteração';
+        if (expandirBtn) botoes.insertBefore(btn, expandirBtn);
+        else botoes.appendChild(btn);
+    }
+
+    // estado inicial: coluna oculta
+    let visible = false;
+
+    // esconde coluna ao carregar
+    table.querySelectorAll('tr').forEach(row => {
+        const cell = row.children[targetIndex];
+        if (cell) cell.style.display = 'none';
+    });
+
+    // clique do botão
+    btn.addEventListener('click', () => {
+        visible = !visible;
+        table.querySelectorAll('tr').forEach(row => {
+            const cell = row.children[targetIndex];
+            if (cell) cell.style.display = visible ? '' : 'none';
+        });
+        btn.textContent = visible ? 'Ocultar Última Alteração' : 'Mostrar Última Alteração';
+    });
+});
+
+
+
+
+
+
+
 // --- Função para salvar edição inline ---
 function salvarEdicao(e) {
   const cell = e.target;
@@ -617,82 +676,126 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const filtroBtns = document.querySelectorAll(".filtro-btn");
 
-// Cria botão "Excluir usuários" dentro do modal de Configurações
-const btnExcluirUsuarios = document.createElement('button');
-btnExcluirUsuarios.textContent = "Excluir usuários";
-btnExcluirUsuarios.type = "button";
-btnExcluirUsuarios.style.marginTop = "10px";
-document.querySelector('#configModal .modal-content').appendChild(btnExcluirUsuarios);
+  filtroBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const colIndex = parseInt(btn.dataset.col);
 
-// Elementos do modal de exclusão
-const excluirUsuariosModal = document.getElementById('excluirUsuariosModal');
-const closeExcluir = document.querySelector('.closeExcluir');
-const cancelarExcluir = document.getElementById('cancelarExcluirUsuarios');
+      // cria o modal de filtro/ordenação
+      const modal = document.createElement("div");
+      modal.className = "filtro-modal";
+      modal.innerHTML = `
+        <div class="filtro-content">
+          <h3>Ordenar/Filtrar</h3>
+          <button data-action="az">A → Z</button>
+          <button data-action="za">Z → A</button>
+          <button data-action="asc">Menor → Maior</button>
+          <button data-action="desc">Maior → Menor</button>
+          <button data-action="date-asc">Mais antigo → Mais novo</button>
+          <button data-action="date-desc">Mais novo → Mais antigo</button>
+          <button data-action="close">Fechar</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
 
-btnExcluirUsuarios.onclick = () => {
-    // Abre modal
-    excluirUsuariosModal.style.display = 'block';
-
-    // Carrega lista de usuários via fetch
-    fetch('listar_usuarios.php')
-  .then(res => res.json())
-  .then(usuarios => {
-      const lista = document.getElementById('listaUsuarios');
-      lista.innerHTML = '';
-
-      usuarios.forEach(u => {
-          const label = document.createElement('label');
-          label.style.display = 'block';
-
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.name = 'usuarios[]';
-          checkbox.value = u.usuario;
-
-          label.appendChild(checkbox);
-          label.appendChild(document.createTextNode(' ' + u.usuario));
-          lista.appendChild(label);
+      // ações de ordenação
+      modal.querySelectorAll("button").forEach(b => {
+        b.addEventListener("click", () => {
+          const action = b.dataset.action;
+          if (action === "close") {
+            modal.remove();
+            return;
+          }
+          ordenarTabela(colIndex, action);
+          modal.remove();
+        });
       });
-  })
-  .catch(err => console.error('Erro ao carregar usuários:', err));
+    });
+  });
 
+  function ordenarTabela(colIndex, tipo) {
+    const table = document.querySelector(".table-scroll table");
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
 
-};
+    rows.sort((a, b) => {
+      let valA = a.cells[colIndex].innerText.trim();
+      let valB = b.cells[colIndex].innerText.trim();
 
-// Fecha modal
-closeExcluir.onclick = () => excluirUsuariosModal.style.display = 'none';
-cancelarExcluir.onclick = () => excluirUsuariosModal.style.display = 'none';
-window.addEventListener('click', (e) => {
-    if (e.target === excluirUsuariosModal) excluirUsuariosModal.style.display = 'none';
+      // tenta converter para número ou data
+      const numA = parseFloat(valA.replace(",", "."));
+      const numB = parseFloat(valB.replace(",", "."));
+      const dateA = new Date(valA);
+      const dateB = new Date(valB);
+
+      switch (tipo) {
+        case "az": return valA.localeCompare(valB);
+        case "za": return valB.localeCompare(valA);
+        case "asc": return (isNaN(numA) ? valA.localeCompare(valB) : numA - numB);
+        case "desc": return (isNaN(numB) ? valB.localeCompare(valA) : numB - numA);
+        case "date-asc": return dateA - dateB;
+        case "date-desc": return dateB - dateA;
+      }
+    });
+
+    rows.forEach(r => tbody.appendChild(r)); // reordena as linhas
+  }
 });
 
-const confirmarExcluir = document.getElementById('confirmarExcluirUsuarios');
 
-confirmarExcluir.onclick = () => {
-    const checkboxes = document.querySelectorAll('#listaUsuarios input[name="usuarios[]"]:checked');
-    if (checkboxes.length === 0) return alert("Selecione pelo menos um usuário!");
 
-    const usuariosSelecionados = Array.from(checkboxes).map(cb => cb.value);
+document.addEventListener('DOMContentLoaded', () => {
+  const table = document.querySelector('.table-scroll table');
+  if (!table) { console.error('Tabela .table-scroll table não encontrada'); return; }
 
-    if (!confirm(`Tem certeza que deseja excluir: ${usuariosSelecionados.join(', ')}?`)) return;
+  // util para normalizar texto (remove acentos)
+  function normalize(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
 
-    fetch('excluir_usuarios.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usuarios: usuariosSelecionados })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.sucesso) {
-            alert("Usuários excluídos com sucesso!");
-            usuariosSelecionados.forEach(u => {
-                const cb = document.querySelector(`#listaUsuarios input[value="${u}"]`);
-                if (cb) cb.closest('label').remove();
-            });
-        } else {
-            alert("Erro: " + data.mensagem);
-        }
-    })
-    .catch(err => console.error(err));
-};
+  // tenta encontrar o índice pelo cabeçalho
+  const headers = Array.from(table.querySelectorAll('thead th'));
+  let targetIndex = headers.findIndex(th => {
+    const txt = normalize(th.textContent || '');
+    return txt.includes('ultima') || txt.includes('ultima alteracao') || txt.includes('ultimaalteracao');
+  });
+
+  // fallback: procurar td com data-campo="ultimaalteracao" na primeira linha do tbody
+  if (targetIndex === -1) {
+    const firstRow = table.querySelector('tbody tr');
+    if (firstRow) {
+      const tds = Array.from(firstRow.children);
+      targetIndex = tds.findIndex(td => td.dataset && td.dataset.campo === 'ultimaalteracao');
+    }
+  }
+
+  if (targetIndex === -1) {
+    console.error('Não foi possível localizar a coluna "Última alteração". Verifique o cabeçalho e os data-campo.');
+    return;
+  }
+
+  console.log('Índice da coluna "Última alteração":', targetIndex);
+
+  // cria botão automaticamente se não existir
+  let btn = document.getElementById('toggleUltima');
+  if (!btn) {
+    const botoes = document.querySelector('.botoes') || document.body;
+    btn = document.createElement('button');
+    btn.id = 'toggleUltima';
+    btn.type = 'button';
+    btn.textContent = 'Ocultar Última Alteração';
+    btn.style.marginLeft = '8px';
+    botoes.appendChild(btn);
+  }
+
+  let visible = true;
+  btn.addEventListener('click', () => {
+    const rows = table.querySelectorAll('tr');
+    rows.forEach(row => {
+      const cell = row.children[targetIndex];
+      if (cell) cell.style.display = visible ? 'none' : '';
+    });
+    visible = !visible;
+    btn.textContent = visible ? 'Ocultar Última Alteração' : 'Mostrar Última Alteração';
+  });
+});
