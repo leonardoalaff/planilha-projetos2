@@ -512,3 +512,106 @@ window.onclick = (e) => {
   if (e.target == configModal) configModal.style.display = "none";
   if (e.target == novaContaModal) novaContaModal.style.display = "none";
 }
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const btnPrint = document.getElementById('btnPrint');
+    const printModal = document.getElementById('printModal');
+    const printForm = document.getElementById('printColumnsForm');
+    const selecionarTodasCols = document.getElementById('selecionarTodasCols');
+    const desselecionarTodasCols = document.getElementById('desselecionarTodasCols');
+    const confirmarImpressao = document.getElementById('confirmarImpressao');
+    const cancelarImpressao = document.getElementById('cancelarImpressao');
+
+    btnPrint.addEventListener('click', () => {
+        // Limpa form antes de abrir
+        printForm.innerHTML = '';
+
+        const ths = document.querySelectorAll('.table-scroll table thead th');
+        ths.forEach((th, index) => {
+            // Pula a primeira coluna de checkboxes
+            if(index === 0) return;
+
+            const label = document.createElement('label');
+            label.style.display = 'block';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = index;
+            checkbox.checked = true; // padrão selecionado
+            checkbox.className = 'col-select';
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(' ' + th.textContent.trim()));
+            printForm.appendChild(label);
+        });
+
+        printModal.style.display = 'flex';
+    });
+
+    selecionarTodasCols.addEventListener('click', () => {
+        printForm.querySelectorAll('input.col-select').forEach(cb => cb.checked = true);
+    });
+
+    desselecionarTodasCols.addEventListener('click', () => {
+        printForm.querySelectorAll('input.col-select').forEach(cb => cb.checked = false);
+    });
+
+    cancelarImpressao.addEventListener('click', () => {
+        printModal.style.display = 'none';
+    });
+
+    confirmarImpressao.addEventListener('click', () => {
+        const colunasSelecionadas = Array.from(printForm.querySelectorAll('input.col-select'))
+            .filter(cb => cb.checked)
+            .map(cb => parseInt(cb.value));
+
+        if(colunasSelecionadas.length === 0) {
+            alert('Selecione pelo menos uma coluna!');
+            return;
+        }
+
+        const tabelaOriginal = document.querySelector('.table-scroll table');
+        const linhasSelecionadas = tabelaOriginal.querySelectorAll('tbody tr input[type="checkbox"]:checked');
+
+        if(linhasSelecionadas.length === 0) {
+            alert('Nenhuma linha selecionada para impressão!');
+            return;
+        }
+
+        const tabelaTemp = document.createElement('table');
+
+        // Cabeçalho
+        const theadClone = tabelaOriginal.querySelector('thead').cloneNode(true);
+        theadClone.querySelectorAll('th').forEach((th, idx) => {
+            if(!colunasSelecionadas.includes(idx)) th.remove();
+            else {
+                const cb = th.querySelector('input.col-select');
+                if(cb) cb.remove();
+            }
+        });
+        tabelaTemp.appendChild(theadClone);
+
+        // Linhas
+        const tbodyTemp = document.createElement('tbody');
+        linhasSelecionadas.forEach(input => {
+            const trClone = input.closest('tr').cloneNode(true);
+            trClone.querySelectorAll('td').forEach((td, idx) => {
+                if(!colunasSelecionadas.includes(idx)) td.remove();
+            });
+            tbodyTemp.appendChild(trClone);
+        });
+        tabelaTemp.appendChild(tbodyTemp);
+
+        // Imprimir
+        const win = window.open('', '', 'width=900,height=600');
+        win.document.write('<html><head><title>Imprimir Projetos</title>');
+        win.document.write('<style>table{border-collapse:collapse;width:100%;}th,td{border:1px solid #333;padding:6px;text-align:left;}th{background:#eee;}</style>');
+        win.document.write('</head><body>');
+        win.document.write(tabelaTemp.outerHTML);
+        win.document.write('</body></html>');
+        win.document.close();
+        win.print();
+
+        printModal.style.display = 'none';
+    });
+});

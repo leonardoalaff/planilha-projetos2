@@ -44,26 +44,27 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <body class="<?= $isDark ? 'dark-mode' : '' ?>">
   <!-- MENU LATERAL -->
   <aside class="sidebar">
-    <h2>PAINEL</h2>
-    <!-- Mensagem de boas-vindas -->
-  <div class="bem-vindo">
+    <div class="bem-vindo">
     Bem-vindo, <?= htmlspecialchars($_SESSION['usuario'] ?? 'Usuário') ?>!
   </div>
-    <a href="#" class="add" id="abrirModal">+ Adicionar Projeto</a>
+    <h2> <div class="icone-painel"></div> PAINEL</h2>
+    <!-- Mensagem de boas-vindas -->
+  
+    <a href="#" class="add" id="abrirModal"><div class="icone-adicionar"></div> Adicionar Projeto</a>
 
     <abbr class="switch" title="Modo Dark"><label class="switch">
   <input type="checkbox" id="toggleDarkMode"> <?= $isDark ? '' : '' ?> >
   <span class="slider"></span>
 </label></abbr>
 
-<button id="btnConfig"><span class="icone-config">⚙️</span> Configurações</button>
+<button id="btnConfig"><div class="icone-config"></div> Configurações</button>
 
   </aside>
 
   <!-- CONTEÚDO PRINCIPAL -->
   <main>
     <header>
-      <h1 class="t-projetos-em-andamento">Projetos em andamento 
+      <h1 class="t-projetos-em-andamento">Projetos em andamento
         <span></span>
       </h1>
 
@@ -79,7 +80,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
     <form class="table-container" id="tabelaProjetos" method="POST" action="processa.php">
       <div class="botoes">
         <button type="submit" class="excluir btn-excluir">Excluir</button>
-        <button class="imprimir btn-imprimir" type="button" id="btnPrint" onclick="imprimirSelecionados()">
+        <button class="imprimir btn-imprimir" type="button" id="btnPrint">
           <span class="icone-impressora">🖨️</span> Imprimir
           <span class="papel"></span>
         </button>
