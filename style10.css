@@ -728,3 +728,41 @@ body.dark-mode .btn-sair {
 body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {
   transition: background-color 0.3s, color 0.3s;
 }
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 350px;
+  max-width: 90%;
+  margin: 10% auto;
+  text-align: center;
+}
+
+.modal-content input {
+  width: 90%;
+  padding: 8px;
+  margin: 5px 0;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+}
+
+.closeExcluir {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+}

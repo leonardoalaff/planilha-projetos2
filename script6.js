@@ -615,3 +615,84 @@ document.addEventListener('DOMContentLoaded', () => {
         printModal.style.display = 'none';
     });
 });
+
+
+
+// Cria botão "Excluir usuários" dentro do modal de Configurações
+const btnExcluirUsuarios = document.createElement('button');
+btnExcluirUsuarios.textContent = "Excluir usuários";
+btnExcluirUsuarios.type = "button";
+btnExcluirUsuarios.style.marginTop = "10px";
+document.querySelector('#configModal .modal-content').appendChild(btnExcluirUsuarios);
+
+// Elementos do modal de exclusão
+const excluirUsuariosModal = document.getElementById('excluirUsuariosModal');
+const closeExcluir = document.querySelector('.closeExcluir');
+const cancelarExcluir = document.getElementById('cancelarExcluirUsuarios');
+
+btnExcluirUsuarios.onclick = () => {
+    // Abre modal
+    excluirUsuariosModal.style.display = 'block';
+
+    // Carrega lista de usuários via fetch
+    fetch('listar_usuarios.php')
+  .then(res => res.json())
+  .then(usuarios => {
+      const lista = document.getElementById('listaUsuarios');
+      lista.innerHTML = '';
+
+      usuarios.forEach(u => {
+          const label = document.createElement('label');
+          label.style.display = 'block';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.name = 'usuarios[]';
+          checkbox.value = u.usuario;
+
+          label.appendChild(checkbox);
+          label.appendChild(document.createTextNode(' ' + u.usuario));
+          lista.appendChild(label);
+      });
+  })
+  .catch(err => console.error('Erro ao carregar usuários:', err));
+
+
+};
+
+// Fecha modal
+closeExcluir.onclick = () => excluirUsuariosModal.style.display = 'none';
+cancelarExcluir.onclick = () => excluirUsuariosModal.style.display = 'none';
+window.addEventListener('click', (e) => {
+    if (e.target === excluirUsuariosModal) excluirUsuariosModal.style.display = 'none';
+});
+
+const confirmarExcluir = document.getElementById('confirmarExcluirUsuarios');
+
+confirmarExcluir.onclick = () => {
+    const checkboxes = document.querySelectorAll('#listaUsuarios input[name="usuarios[]"]:checked');
+    if (checkboxes.length === 0) return alert("Selecione pelo menos um usuário!");
+
+    const usuariosSelecionados = Array.from(checkboxes).map(cb => cb.value);
+
+    if (!confirm(`Tem certeza que deseja excluir: ${usuariosSelecionados.join(', ')}?`)) return;
+
+    fetch('excluir_usuarios.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuarios: usuariosSelecionados })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.sucesso) {
+            alert("Usuários excluídos com sucesso!");
+            usuariosSelecionados.forEach(u => {
+                const cb = document.querySelector(`#listaUsuarios input[value="${u}"]`);
+                if (cb) cb.closest('label').remove();
+            });
+        } else {
+            alert("Erro: " + data.mensagem);
+        }
+    })
+    .catch(err => console.error(err));
+};

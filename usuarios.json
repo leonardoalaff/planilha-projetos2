@@ -8,5 +8,10 @@
         "usuario": "Leonardo",
         "senha": "123456",
         "darkmode": false
+    },
+    {
+        "usuario": "conta excluir",
+        "senha": "123",
+        "darkmode": false
     }
 ]
