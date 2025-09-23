@@ -809,3 +809,87 @@ body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {
 #toggleUltima:hover {
   background-color: #0056b3; /* azul mais escuro no hover */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.filtro-menu {
+  background-color: #1a2e61;
+  color: white;
+  position: absolute;
+  max-width: 150px;
+  max-height: 400px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  padding: 8px;
+  z-index: 9999;
+  display: none;
+  overflow: hidden;
+  border-radius: 4px;
+  font-family: sans-serif;
+}
+
+.filtro-itens {
+  max-height: 100px;
+  overflow-y: auto;
+  margin-bottom: 6px;
+}
+
+.filtro-ordenacao {
+  border-top: 1px solid #ccc;
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+.filtro-ordenacao button {
+  margin: 2px;
+  margin-left: 0;
+  border: none;
+  transition: 0.3s;
+  background-color: white;
+  border-radius: 2px;
+}
+.filtro-ordenacao button:hover {
+  background-color: #007bff;
+  color: white;
+  transition: 0.3s;
+}
+.filtro-ordenacao button:active {
+  transform: scale(1.1);
+}
+
+.filtro-acoes {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.filtro-acoes button {
+  flex: 1;
+  background-color: #1a2e61;
+  color: white;
+  border: none;
+  transition: 0.2s;
+}
+.filtro-acoes button:hover {
+  background-color: #007bff;
+  border-radius: 2px;
+  transition: 0.2s;
+}
+
+
+#btn-salvar-nc {
+  background-color: #1a2e61;
+}
+
+#btn-alterar {
+  background-color: #1a2e61;
+}

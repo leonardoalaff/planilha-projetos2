@@ -1,64 +1,5 @@
 // script.js
 
-document.addEventListener('DOMContentLoaded', () => {
-    const table = document.querySelector('.table-scroll table');
-    if (!table) { console.error('Tabela não encontrada'); return; }
-
-    // índice da coluna "Última alteração"
-    const headers = Array.from(table.querySelectorAll('thead th'));
-    let targetIndex = headers.findIndex(th => th.textContent.toLowerCase().includes('última alteração'));
-
-    if (targetIndex === -1) {
-        const firstRow = table.querySelector('tbody tr');
-        if (firstRow) {
-            targetIndex = Array.from(firstRow.children).findIndex(td => td.dataset.campo === 'ultimaalteracao');
-        }
-    }
-
-    if (targetIndex === -1) {
-        console.error('Coluna "Última alteração" não encontrada.');
-        return;
-    }
-
-    // cria botão se não existir
-    let btn = document.getElementById('toggleUltima');
-    if (!btn) {
-        const botoes = document.querySelector('.botoes') || document.body;
-        const expandirBtn = document.getElementById('btnExpandir');
-        btn = document.createElement('button');
-        btn.id = 'toggleUltima';
-        btn.type = 'button';
-        btn.textContent = 'Mostrar Última Alteração';
-        if (expandirBtn) botoes.insertBefore(btn, expandirBtn);
-        else botoes.appendChild(btn);
-    }
-
-    // estado inicial: coluna oculta
-    let visible = false;
-
-    // esconde coluna ao carregar
-    table.querySelectorAll('tr').forEach(row => {
-        const cell = row.children[targetIndex];
-        if (cell) cell.style.display = 'none';
-    });
-
-    // clique do botão
-    btn.addEventListener('click', () => {
-        visible = !visible;
-        table.querySelectorAll('tr').forEach(row => {
-            const cell = row.children[targetIndex];
-            if (cell) cell.style.display = visible ? '' : 'none';
-        });
-        btn.textContent = visible ? 'Ocultar Última Alteração' : 'Mostrar Última Alteração';
-    });
-});
-
-
-
-
-
-
-
 // --- Função para salvar edição inline ---
 function salvarEdicao(e) {
   const cell = e.target;
@@ -368,7 +309,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
+
+document.addEventListener('DOMContentLoaded', () => { 
   const table = document.querySelector('.table-scroll table');
   let menuAtivo = null;
 
@@ -385,10 +327,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const th = btn.closest('th');
     if (!th) return;
 
-    // calcula índice da coluna no thead (0 = checkbox, 1 = Pedido, ...)
     const colIndex = Array.from(th.parentElement.children).indexOf(th);
 
-    // coleta valores únicos da coluna (string)
+    // coleta valores únicos
     const valoresSet = new Set();
     table.querySelectorAll('tbody tr').forEach(tr => {
       const td = tr.cells[colIndex];
@@ -399,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // monta menu
     const menu = document.createElement('div');
     menu.className = 'filtro-menu';
+
     const itens = [];
     itens.push(`<label><input type="checkbox" data-select-all checked> Selecionar todos</label>`);
     valores.forEach(v => {
@@ -407,29 +349,41 @@ document.addEventListener('DOMContentLoaded', () => {
       itens.push(`<label><input type="checkbox" value="${valAttr}" checked> ${labelText}</label>`);
     });
 
+    // opções de ordenação
+    const ordenacao = `
+      <div class="filtro-ordenacao">
+        <strong>Ordenar:</strong><br>
+        <button type="button" data-sort="az">A-Z</button>
+        <button type="button" data-sort="za">Z-A</button>
+        <button type="button" data-sort="num-asc">Menor → Maior</button>
+        <button type="button" data-sort="num-desc">Maior → Menor</button>
+        <button type="button" data-sort="date-asc">Data ↑</button>
+        <button type="button" data-sort="date-desc">Data ↓</button>
+      </div>
+    `;
+
     menu.innerHTML = `
-      <div style="min-width:200px; max-height:160px; overflow:auto;">
+      <div class="filtro-itens">
         ${itens.join('')}
       </div>
-      <div style="display:flex; gap:6px; margin-top:8px;">
-        <button type="button" data-apply style="flex:1">Aplicar</button>
-        <button type="button" data-cancel style="flex:1">Cancelar</button>
+      ${ordenacao}
+      <div class="filtro-acoes">
+        <button type="button" data-apply>Aplicar</button>
+        <button type="button" data-cancel>Cancelar</button>
       </div>
     `;
 
     document.body.appendChild(menu);
     menuAtivo = menu;
 
-    // posiciona abaixo do botão (considera scroll)
+    // posiciona ao lado do botão
     const rect = btn.getBoundingClientRect();
     menu.style.left = `${rect.left + window.scrollX}px`;
     menu.style.top  = `${rect.bottom + window.scrollY}px`;
     menu.style.display = 'block';
 
-    // evita fechamento ao clicar dentro
     menu.addEventListener('click', e => e.stopPropagation());
 
-    // select all
     const selectAll = menu.querySelector('[data-select-all]');
     selectAll.addEventListener('change', (e) => {
       const checked = e.target.checked;
@@ -438,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // aplicar
+    // aplicar filtros
     menu.querySelector('[data-apply]').addEventListener('click', () => {
       const selected = Array.from(menu.querySelectorAll('input[type="checkbox"]'))
         .filter(cb => cb.checked && !cb.hasAttribute('data-select-all'))
@@ -456,11 +410,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // cancelar
     menu.querySelector('[data-cancel]').addEventListener('click', fecharMenu);
+
+    // ordenação
+    menu.querySelectorAll('[data-sort]').forEach(btnSort => {
+      btnSort.addEventListener('click', () => {
+        const tipo = btnSort.getAttribute('data-sort');
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+        let sorted = rows.slice();
+        sorted.sort((a,b) => {
+          let valA = a.cells[colIndex]?.textContent.trim() || '';
+          let valB = b.cells[colIndex]?.textContent.trim() || '';
+
+          switch(tipo) {
+            case 'az':
+              return valA.localeCompare(valB, undefined, {sensitivity:'base'});
+            case 'za':
+              return valB.localeCompare(valA, undefined, {sensitivity:'base'});
+            case 'num-asc':
+              return parseFloat(valA) - parseFloat(valB);
+            case 'num-desc':
+              return parseFloat(valB) - parseFloat(valA);
+            case 'date-asc':
+              return new Date(valA) - new Date(valB);
+            case 'date-desc':
+              return new Date(valB) - new Date(valA);
+          }
+        });
+
+        // reanexa as linhas ordenadas
+        sorted.forEach(tr => table.tBodies[0].appendChild(tr));
+      });
+    });
   }
 
   // liga aos botões
   document.querySelectorAll('.filtro-btn').forEach(btn => {
-    // garante que seja type="button" mesmo se o HTML não tiver
     btn.setAttribute('type','button');
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -469,15 +454,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // fecha ao clicar fora
   document.addEventListener('click', (e) => {
     if (menuAtivo && !menuAtivo.contains(e.target)) fecharMenu();
   });
-
-  // fecha em resize/scroll (útil)
-  window.addEventListener('resize', fecharMenu);
-  window.addEventListener('scroll', fecharMenu, true);
 });
+
 
 
 document.querySelectorAll("#tabelaProjetos td[contenteditable='true']").forEach(celula => {
@@ -676,126 +657,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const filtroBtns = document.querySelectorAll(".filtro-btn");
 
-  filtroBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const colIndex = parseInt(btn.dataset.col);
-
-      // cria o modal de filtro/ordenação
-      const modal = document.createElement("div");
-      modal.className = "filtro-modal";
-      modal.innerHTML = `
-        <div class="filtro-content">
-          <h3>Ordenar/Filtrar</h3>
-          <button data-action="az">A → Z</button>
-          <button data-action="za">Z → A</button>
-          <button data-action="asc">Menor → Maior</button>
-          <button data-action="desc">Maior → Menor</button>
-          <button data-action="date-asc">Mais antigo → Mais novo</button>
-          <button data-action="date-desc">Mais novo → Mais antigo</button>
-          <button data-action="close">Fechar</button>
-        </div>
-      `;
-      document.body.appendChild(modal);
-
-      // ações de ordenação
-      modal.querySelectorAll("button").forEach(b => {
-        b.addEventListener("click", () => {
-          const action = b.dataset.action;
-          if (action === "close") {
-            modal.remove();
-            return;
-          }
-          ordenarTabela(colIndex, action);
-          modal.remove();
-        });
-      });
-    });
-  });
-
-  function ordenarTabela(colIndex, tipo) {
-    const table = document.querySelector(".table-scroll table");
-    const tbody = table.querySelector("tbody");
-    const rows = Array.from(tbody.querySelectorAll("tr"));
-
-    rows.sort((a, b) => {
-      let valA = a.cells[colIndex].innerText.trim();
-      let valB = b.cells[colIndex].innerText.trim();
-
-      // tenta converter para número ou data
-      const numA = parseFloat(valA.replace(",", "."));
-      const numB = parseFloat(valB.replace(",", "."));
-      const dateA = new Date(valA);
-      const dateB = new Date(valB);
-
-      switch (tipo) {
-        case "az": return valA.localeCompare(valB);
-        case "za": return valB.localeCompare(valA);
-        case "asc": return (isNaN(numA) ? valA.localeCompare(valB) : numA - numB);
-        case "desc": return (isNaN(numB) ? valB.localeCompare(valA) : numB - numA);
-        case "date-asc": return dateA - dateB;
-        case "date-desc": return dateB - dateA;
-      }
-    });
-
-    rows.forEach(r => tbody.appendChild(r)); // reordena as linhas
-  }
-});
-
-
+function parseDataBr(valor) {
+    const match = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (!match) return null;
+    const dia = parseInt(match[1], 10);
+    const mes = parseInt(match[2], 10) - 1;
+    const ano = parseInt(match[3], 10);
+    const data = new Date(ano, mes, dia);
+    return isNaN(data.getTime()) ? null : data;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-  const table = document.querySelector('.table-scroll table');
-  if (!table) { console.error('Tabela .table-scroll table não encontrada'); return; }
-
-  // util para normalizar texto (remove acentos)
-  function normalize(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
-
-  // tenta encontrar o índice pelo cabeçalho
-  const headers = Array.from(table.querySelectorAll('thead th'));
-  let targetIndex = headers.findIndex(th => {
-    const txt = normalize(th.textContent || '');
-    return txt.includes('ultima') || txt.includes('ultima alteracao') || txt.includes('ultimaalteracao');
-  });
-
-  // fallback: procurar td com data-campo="ultimaalteracao" na primeira linha do tbody
-  if (targetIndex === -1) {
-    const firstRow = table.querySelector('tbody tr');
-    if (firstRow) {
-      const tds = Array.from(firstRow.children);
-      targetIndex = tds.findIndex(td => td.dataset && td.dataset.campo === 'ultimaalteracao');
+    // --- Para inputs de data no modal ---
+    const entregaInput = document.querySelector('input[name="entrega"]');
+    if (entregaInput) {
+        entregaInput.addEventListener('blur', (e) => {
+            const data = parseDataBr(e.target.value);
+            if (data) e.target.value = data.toLocaleDateString('pt-BR');
+        });
     }
-  }
 
-  if (targetIndex === -1) {
-    console.error('Não foi possível localizar a coluna "Última alteração". Verifique o cabeçalho e os data-campo.');
-    return;
-  }
-
-  console.log('Índice da coluna "Última alteração":', targetIndex);
-
-  // cria botão automaticamente se não existir
-  let btn = document.getElementById('toggleUltima');
-  if (!btn) {
-    const botoes = document.querySelector('.botoes') || document.body;
-    btn = document.createElement('button');
-    btn.id = 'toggleUltima';
-    btn.type = 'button';
-    btn.textContent = 'Ocultar Última Alteração';
-    btn.style.marginLeft = '8px';
-    botoes.appendChild(btn);
-  }
-
-  let visible = true;
-  btn.addEventListener('click', () => {
-    const rows = table.querySelectorAll('tr');
-    rows.forEach(row => {
-      const cell = row.children[targetIndex];
-      if (cell) cell.style.display = visible ? 'none' : '';
+    // --- Para células editáveis na coluna de data ---
+    document.querySelectorAll("td[contenteditable='true']").forEach(celula => {
+        celula.addEventListener("blur", function() {
+            const novoValor = this.textContent.trim();
+            const data = parseDataBr(novoValor);
+            if (data) {
+                this.textContent = data.toLocaleDateString('pt-BR');
+            }
+            // aqui chama a função de salvar edição já existente
+            salvarEdicao({ target: this });
+        });
     });
-    visible = !visible;
-    btn.textContent = visible ? 'Ocultar Última Alteração' : 'Mostrar Última Alteração';
-  });
 });

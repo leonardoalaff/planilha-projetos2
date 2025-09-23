@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     "pedido" => $_POST['pedido'],
     "cliente" => $_POST['cliente'],
     "projhc" => $_POST['projhc'],
-    "entrega" => $_POST['local_entrega'],
+    "entrega" => $_POST['entrega'],
     "quantidade" => $_POST['quantidade'],
     "unidade" => $_POST['unidade'],
     "status" => $_POST['status'],
@@ -33,3 +33,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 header("Location: index.php");
 exit;
+
+
+$entrega = $_POST['entrega'] ?? '';
+// converte de DD/MM/AAAA para AAAA-MM-DD para salvar no JSON
+if (preg_match('/(\d{2})\/(\d{2})\/(\d{4})/', $entrega, $m)) {
+    $entrega = $m[3] . '-' . $m[2] . '-' . $m[1];
+}
+
+$novo = [
+    "id" => uniqid(),
+    "ultimaalteracao" => date('d/m/Y H:i:s'),
+    "pedido" => $_POST['pedido'],
+    "cliente" => $_POST['cliente'],
+    "projhc" => $_POST['projhc'],
+    "entrega" => $entrega,
+    // resto dos campos...
+];

@@ -39,7 +39,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <head>
   <meta charset="UTF-8">
   <title>Painel de Projetos</title>
-  <link rel="stylesheet" href="style10.css">
+  <link rel="stylesheet" href="style11.css">
 </head>
 <body class="<?= $isDark ? 'dark-mode' : '' ?>">
   <!-- MENU LATERAL -->
@@ -150,7 +150,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
         <input type="text" name="pedido" placeholder="Pedido">
         <input type="text" name="cliente" placeholder="Cliente">
         <input type="text" name="projhc" placeholder="Proj. HC">
-        <input type="date" name="entrega">
+        <input type="text" name="entrega" id="entrega" placeholder="DD/MM/AAAA">
         <input type="text" name="quantidade" placeholder="Quantidade">
         <input type="text" name="unidade" placeholder="Unidade">
         <input type="text" name="status" placeholder="Status">
@@ -203,7 +203,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
     <form method="POST" action="nova_conta.php">
       <input type="text" name="usuario" placeholder="Novo usuário" required>
       <input type="password" name="senha" placeholder="Senha" required>
-      <button type="submit">Salvar</button>
+      <button id="btn-salvar-nc" type="submit">Salvar</button>
     </form>
   </div>
 </div>
@@ -216,7 +216,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
     <form method="POST" action="alterar_usuario.php">
       <input type="text" name="usuario" placeholder="Novo usuário" required>
       <input type="password" name="senha" placeholder="Nova senha" required>
-      <button type="submit">Salvar</button>
+      <button id="btn-alterar" type="submit">Salvar</button>
     </form>
   </div>
 </div>
@@ -304,6 +304,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
+<script>
+const entregaInput = document.getElementById('entrega');
+entregaInput.addEventListener('input', (e) => {
+  let v = e.target.value.replace(/\D/g,''); // remove tudo que não é número
+  if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+  if (v.length >= 6) v = v.slice(0,5) + '/' + v.slice(5,9);
+  e.target.value = v;
+});
+</script>
+
 
 
 <script>
