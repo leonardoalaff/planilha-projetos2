@@ -1,5 +1,61 @@
 // script.js
 
+document.addEventListener('DOMContentLoaded', () => {
+    const table = document.querySelector('.table-scroll table');
+    if (!table) { console.error('Tabela não encontrada'); return; }
+
+    // índice da coluna "Última alteração"
+    const headers = Array.from(table.querySelectorAll('thead th'));
+    let targetIndex = headers.findIndex(th => th.textContent.toLowerCase().includes('última alteração'));
+
+    if (targetIndex === -1) {
+        const firstRow = table.querySelector('tbody tr');
+        if (firstRow) {
+            targetIndex = Array.from(firstRow.children).findIndex(td => td.dataset.campo === 'ultimaalteracao');
+        }
+    }
+
+    if (targetIndex === -1) {
+        console.error('Coluna "Última alteração" não encontrada.');
+        return;
+    }
+
+    // cria botão se não existir
+    let btn = document.getElementById('toggleUltima');
+    if (!btn) {
+        const botoes = document.querySelector('.botoes') || document.body;
+        const expandirBtn = document.getElementById('btnExpandir');
+        btn = document.createElement('button');
+        btn.id = 'toggleUltima';
+        btn.type = 'button';
+        btn.textContent = 'Mostrar Última Alteração';
+        if (expandirBtn) botoes.insertBefore(btn, expandirBtn);
+        else botoes.appendChild(btn);
+    }
+
+    // estado inicial: coluna oculta
+    let visible = false;
+
+    // esconde coluna ao carregar
+    table.querySelectorAll('tr').forEach(row => {
+        const cell = row.children[targetIndex];
+        if (cell) cell.style.display = 'none';
+    });
+
+    // clique do botão
+    btn.addEventListener('click', () => {
+        visible = !visible;
+        table.querySelectorAll('tr').forEach(row => {
+            const cell = row.children[targetIndex];
+            if (cell) cell.style.display = visible ? '' : 'none';
+        });
+        btn.textContent = visible ? 'Ocultar Última Alteração' : 'Mostrar Última Alteração';
+    });
+});
+
+
+
+
 // --- Função para salvar edição inline ---
 function salvarEdicao(e) {
   const cell = e.target;
@@ -691,3 +747,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+

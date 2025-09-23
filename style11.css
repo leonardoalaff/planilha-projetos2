@@ -794,7 +794,7 @@ body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {
 
 /* botão mostrar/ocultar coluna */
 #toggleUltima {
-  background-color: #007bff; /* azul padrão */
+  background-color: #1a2e61; /* azul padrão */
   position: absolute;
   right: 2%;
   color: #fff;
@@ -804,10 +804,11 @@ body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-size: 0.6em;
 }
 
 #toggleUltima:hover {
-  background-color: #0056b3; /* azul mais escuro no hover */
+  background-color: #0e1c3f; /* azul mais escuro no hover */
 }
 
 
