@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($projetos as &$proj) {
             if ($proj['pedido'] === $pedido) {
                 $proj[$campo] = $valor;
-                if ($ultimaalteracao) $proj['ultimaalteracao'] = $ultimaatualizacao;
+                if ($ultimaalteracao) $proj['ultimaalteracao'] = $ultimaalteracao;
                 break;
             }
         }

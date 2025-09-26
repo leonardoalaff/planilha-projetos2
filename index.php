@@ -52,7 +52,7 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <head>
   <meta charset="UTF-8">
   <title>Painel de Projetos</title>
-  <link rel="stylesheet" href="style11.css">
+  <link rel="stylesheet" href="style12.css">
 </head>
 <body class="<?= $isDark ? 'dark-mode' : '' ?>">
   <!-- MENU LATERAL -->
@@ -140,11 +140,19 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
                 <tr data-id="<?= $proj['id'] ?>">
                   <td><input type="checkbox" name="selecionados[]" value="<?= isset($proj['id']) ? $proj['id'] : uniqid() ?>"></td>
                   <?php
-                  $campos = ['ultimaalteracao','pedido','cliente','projhc','entrega','quantidade','unidade','status','responsavel','atualizacao','comercial','detalhamento','producao','descricao','munsell','pintura','comprador','local_entrega'];
-                  foreach ($campos as $campo):
-                  ?>
-                    <td contenteditable="true" data-pedido="<?= htmlspecialchars($proj['pedido']) ?>" data-campo="<?= $campo ?>"><?= htmlspecialchars($proj[$campo] ?? '') ?></td>
-                  <?php endforeach; ?>
+
+<?php
+$campos = ['ultimaalteracao','pedido','cliente','projhc','entrega','quantidade','unidade','status','responsavel','atualizacao','comercial','detalhamento','producao','descricao','munsell','pintura','comprador','local_entrega'];
+foreach ($campos as $campo):
+?>
+  <td 
+      data-pedido="<?= htmlspecialchars($proj['pedido']) ?>"
+      data-campo="<?= $campo ?>">
+      <?= htmlspecialchars($proj[$campo] ?? '') ?>
+  </td>
+<?php endforeach; ?>
+
+
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>
@@ -168,11 +176,11 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
         <input type="text" name="quantidade" placeholder="Quantidade">
         <input type="text" name="unidade" placeholder="Unidade">
         <input type="text" name="status" placeholder="Status">
-        <input type="text" name="responsavel" placeholder="Responsável">
-        <input type="text" name="atualizacao" placeholder="Atualização">
+        <input class="add-responsavel" type="text" name="responsavel" placeholder="Responsável">
+        <input class="add-atualizacao" type="text" name="atualizacao" placeholder="Atualização">
         <input type="text" name="comercial" placeholder="Comercial">
         <input type="text" name="detalhamento" placeholder="Detalhamento">
-        <input type="text" name="producao" placeholder="Produção">
+        <input class="add-producao" type="text" name="producao" placeholder="Produção">
         <textarea name="descricao" placeholder="Descrição e Observações"></textarea>
         <input type="text" name="munsell" placeholder="Munsell Color">
         <input type="text" name="pintura" placeholder="Pintura">
@@ -338,6 +346,6 @@ entregaInput.addEventListener('input', (e) => {
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="script7.js"></script>
+  <script src="script8.js"></script>
 </body>
 </html>

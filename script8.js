@@ -65,7 +65,7 @@ function salvarEdicao(e) {
 
   if (!pedido || !campo) return;
 
-  fetch("editar.php", {
+  fetch("processa.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: `pedido=${encodeURIComponent(pedido)}&campo=${encodeURIComponent(campo)}&valor=${encodeURIComponent(valor)}`
@@ -749,3 +749,61 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const table = document.querySelector(".table-scroll table");
+
+  function ativarEdicao(cell) {
+    if (!cell) return;
+    cell.contentEditable = "true";
+    cell.focus();
+
+    // Seleciona o conteúdo
+    const range = document.createRange();
+    range.selectNodeContents(cell);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  function salvarCelula(cell) {
+    if (cell && cell.isContentEditable) {
+      salvarEdicao({ target: cell }); // usa sua função AJAX
+      cell.contentEditable = "false";
+    }
+  }
+
+  table.querySelectorAll("td[data-campo]").forEach(cell => {
+    // Duplo clique ativa edição
+    cell.addEventListener("dblclick", () => ativarEdicao(cell));
+
+    // Perder foco salva
+    cell.addEventListener("blur", () => salvarCelula(cell));
+
+    // Navegação
+    cell.addEventListener("keydown", e => {
+      let proxima = null;
+      const tr = cell.parentElement;
+      const index = [...tr.children].indexOf(cell);
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        salvarCelula(cell);
+        return;
+      }
+
+      if (["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"].includes(e.key)) {
+        e.preventDefault();
+
+        if (e.key === "ArrowRight") proxima = tr.children[index + 1];
+        if (e.key === "ArrowLeft") proxima = tr.children[index - 1];
+        if (e.key === "ArrowUp" && tr.previousElementSibling) proxima = tr.previousElementSibling.children[index];
+        if (e.key === "ArrowDown" && tr.nextElementSibling) proxima = tr.nextElementSibling.children[index];
+
+        if (proxima && proxima.dataset.campo) {
+          salvarCelula(cell);        // salva a atual
+          ativarEdicao(proxima);     // ativa edição na próxima
+        }
+      }
+    });
+  });
+});
