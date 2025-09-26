@@ -517,41 +517,91 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
+
 document.querySelectorAll("#tabelaProjetos td[contenteditable='true']").forEach(celula => {
+    celula.removeAttribute('contenteditable');
     let valorOriginal = "";
 
-    // Quando a célula recebe foco, guarda o valor inicial
-    celula.addEventListener("focus", function() {
+    celula.addEventListener("dblclick", function() {
+        this.setAttribute('contenteditable', 'true');
+        this.focus();
         valorOriginal = this.textContent.trim();
     });
 
-    // Quando perde o foco, compara valor atual com o original
     celula.addEventListener("blur", function() {
-        const novoValor = this.textContent.trim();
+        if (!this.isContentEditable) return;
 
-        // Se não mudou nada, não faz nada
-        if (novoValor === valorOriginal) {
-            return;
+        const novoValor = this.textContent.trim();
+        if (novoValor !== valorOriginal) {
+            const linha = this.closest("tr");
+            const id = linha.dataset.id;
+            const campo = this.dataset.campo;
+
+            const agora = new Date();
+            const dataHora = agora.toLocaleDateString("pt-BR") + " " + agora.toLocaleTimeString("pt-BR");
+            const textoUltima = `${usuarioLogado} - ${dataHora}`;
+
+            // Atualiza célula da última alteração na tabela
+            const tdUltima = linha.querySelector("td[data-campo='ultimaalteracao']");
+            if (tdUltima) tdUltima.textContent = textoUltima;
+
+            // Envia para editar.php
+            fetch("editar.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `id=${encodeURIComponent(id)}&campo=${encodeURIComponent(campo)}&valor=${encodeURIComponent(novoValor)}&ultimaalteracao=${encodeURIComponent(textoUltima)}`
+            }).then(res => res.text()).then(console.log)
+              .catch(err => console.error(err));
         }
 
-        const linha = this.closest("tr");
-const id = linha.dataset.id; // pegar id ao invés de pedido
-const campo  = this.dataset.campo;
-const agora = new Date();
-const dataHora = agora.toLocaleDateString("pt-BR") + " " + agora.toLocaleTimeString("pt-BR");
-const textoUltima = `${usuarioLogado} - ${dataHora}`;
-linha.querySelector("td[data-campo='ultimaalteracao']").textContent = textoUltima;
+        this.removeAttribute('contenteditable');
+    });
 
-fetch("editar.php", {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  body: `id=${encodeURIComponent(id)}&campo=${encodeURIComponent(campo)}&valor=${encodeURIComponent(novoValor)}&ultimaalteracao=${encodeURIComponent(textoUltima)}`
-});
-
-
-
+    celula.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            this.blur();
+        }
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const toggle = document.getElementById("toggleDarkMode");
@@ -749,61 +799,54 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const table = document.querySelector(".table-scroll table");
 
-  function ativarEdicao(cell) {
-    if (!cell) return;
-    cell.contentEditable = "true";
-    cell.focus();
 
-    // Seleciona o conteúdo
-    const range = document.createRange();
-    range.selectNodeContents(cell);
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
 
-  function salvarCelula(cell) {
-    if (cell && cell.isContentEditable) {
-      salvarEdicao({ target: cell }); // usa sua função AJAX
-      cell.contentEditable = "false";
+
+
+
+
+table.addEventListener("keydown", e => {
+    const cell = e.target;
+    if (cell.tagName !== "TD" || !cell.isContentEditable) return;
+
+    let nextCell = null;
+    const row = cell.parentElement;
+    const colIndex = Array.from(row.children).indexOf(cell);
+    const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+
+    switch(e.key) {
+        case "ArrowRight": nextCell = row.cells[colIndex + 1]; break;
+        case "ArrowLeft": nextCell = row.cells[colIndex - 1]; break;
+        case "ArrowDown":
+        case "Enter": nextCell = row.parentElement.rows[rowIndex + 1]?.cells[colIndex]; break;
+        case "ArrowUp": nextCell = row.parentElement.rows[rowIndex - 1]?.cells[colIndex]; break;
+        case "Delete":
+            e.preventDefault();
+            cell.innerText = "";
+            salvarEdicao({ target: cell });
+            return;
     }
-  }
 
-  table.querySelectorAll("td[data-campo]").forEach(cell => {
-    // Duplo clique ativa edição
-    cell.addEventListener("dblclick", () => ativarEdicao(cell));
-
-    // Perder foco salva
-    cell.addEventListener("blur", () => salvarCelula(cell));
-
-    // Navegação
-    cell.addEventListener("keydown", e => {
-      let proxima = null;
-      const tr = cell.parentElement;
-      const index = [...tr.children].indexOf(cell);
-
-      if (e.key === "Enter") {
-        e.preventDefault();
-        salvarCelula(cell);
-        return;
-      }
-
-      if (["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"].includes(e.key)) {
+    if (nextCell) {
         e.preventDefault();
 
-        if (e.key === "ArrowRight") proxima = tr.children[index + 1];
-        if (e.key === "ArrowLeft") proxima = tr.children[index - 1];
-        if (e.key === "ArrowUp" && tr.previousElementSibling) proxima = tr.previousElementSibling.children[index];
-        if (e.key === "ArrowDown" && tr.nextElementSibling) proxima = tr.nextElementSibling.children[index];
+        // --- SALVA a célula atual antes de sair ---
+        salvarEdicao({ target: cell });
 
-        if (proxima && proxima.dataset.campo) {
-          salvarCelula(cell);        // salva a atual
-          ativarEdicao(proxima);     // ativa edição na próxima
-        }
-      }
-    });
-  });
+        // ativa edição na próxima célula
+        nextCell.setAttribute('contenteditable', 'true');
+        nextCell.focus();
+
+        // coloca cursor no final
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(nextCell);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+
+        // opcional: deixar a célula anterior ainda editável ou não
+        // cell.removeAttribute('contenteditable'); // remova esta linha ou mova para depois de salvar
+    }
 });

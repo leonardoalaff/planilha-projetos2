@@ -900,3 +900,10 @@ body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {
 #btn-alterar {
   background-color: #1a2e61;
 }
+
+
+@media print {
+  .filtro-btn {
+    display: none !important;
+  }
+}

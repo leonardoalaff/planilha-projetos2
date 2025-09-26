@@ -139,17 +139,13 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
               <?php foreach ($lista as $proj): ?>
                 <tr data-id="<?= $proj['id'] ?>">
                   <td><input type="checkbox" name="selecionados[]" value="<?= isset($proj['id']) ? $proj['id'] : uniqid() ?>"></td>
-                  <?php
 
 <?php
 $campos = ['ultimaalteracao','pedido','cliente','projhc','entrega','quantidade','unidade','status','responsavel','atualizacao','comercial','detalhamento','producao','descricao','munsell','pintura','comprador','local_entrega'];
 foreach ($campos as $campo):
 ?>
-  <td 
-      data-pedido="<?= htmlspecialchars($proj['pedido']) ?>"
-      data-campo="<?= $campo ?>">
-      <?= htmlspecialchars($proj[$campo] ?? '') ?>
-  </td>
+  <td contenteditable="true" data-pedido="<?= htmlspecialchars($proj['pedido']) ?>" data-campo="<?= $campo ?>"><?= htmlspecialchars($proj[$campo] ?? '') ?></td>
+
 <?php endforeach; ?>
 
 
@@ -346,6 +342,6 @@ entregaInput.addEventListener('input', (e) => {
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="script8.js"></script>
+  <script src="script9.js"></script>
 </body>
 </html>
