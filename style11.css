@@ -147,6 +147,8 @@ main {
   background-size: contain;
 }
 .bem-vindo {
+  position: relative;
+  top: -2vh;
   width: 100%;
   font-size: 1em;
   margin-bottom: 50px;
@@ -800,11 +802,11 @@ body, .sidebar, main, header, .table-scroll table, td, th, .modal-content {
   color: #fff;
   border: none;
   padding: 8px 14px;
-  border-radius: 6px;
+  border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  font-size: 0.6em;
+  font-size: 0.8em;
 }
 
 #toggleUltima:hover {

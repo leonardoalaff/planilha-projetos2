@@ -28,7 +28,20 @@ $filtroNome    = $_GET['nome'] ?? '';
 $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroData, $filtroNome) {
     $passou = true;
     if ($filtroProjeto !== '') $passou = $passou && stripos($proj['projhc'], $filtroProjeto) !== false;
-    if ($filtroData !== '')    $passou = $passou && ($proj['entrega'] === $filtroData);
+    if ($filtroData !== '') {
+    // $filtroData vem como AAAA-MM-DD do input date
+    $dataFiltro = DateTime::createFromFormat('Y-m-d', $filtroData);
+
+    // $proj['entrega'] vem como DD/MM/AAAA
+    $dataProj = DateTime::createFromFormat('d/m/Y', $proj['entrega']);
+
+    if ($dataFiltro && $dataProj) {
+        $passou = $passou && ($dataFiltro->format('Y-m-d') === $dataProj->format('Y-m-d'));
+    } else {
+        $passou = false; // se não conseguir converter, não passa no filtro
+    }
+}
+
     if ($filtroNome !== '')    $passou = $passou && stripos($proj['cliente'], $filtroNome) !== false;
     return $passou;
 });
@@ -44,11 +57,12 @@ $lista = array_filter($projetos, function($proj) use ($filtroProjeto, $filtroDat
 <body class="<?= $isDark ? 'dark-mode' : '' ?>">
   <!-- MENU LATERAL -->
   <aside class="sidebar">
-    <div class="bem-vindo">
-    Bem-vindo, <?= htmlspecialchars($_SESSION['usuario'] ?? 'Usuário') ?>!
-  </div>
+    
     <h2> <div class="icone-painel"></div> PAINEL</h2>
     <!-- Mensagem de boas-vindas -->
+     <div class="bem-vindo">
+    Bem-vindo, <?= htmlspecialchars($_SESSION['usuario'] ?? 'Usuário') ?>!
+  </div>
   
     <a href="#" class="add" id="abrirModal"><div class="icone-adicionar"></div> Adicionar Projeto</a>
 
@@ -324,6 +338,6 @@ entregaInput.addEventListener('input', (e) => {
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="script6.js"></script>
+  <script src="script7.js"></script>
 </body>
 </html>
